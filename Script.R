@@ -2,6 +2,9 @@
 #install.packages("ggplot2", dependencies = TRUE)
 #install.packages("data.table", dependencies = TRUE)
 #install.packages("kableExtra")
+#install.packages("readxl")
+#install.packages("reshape2")
+#install.packages("lubridate")
 
 # 2. Cargar paquetes
 library(data.table)
