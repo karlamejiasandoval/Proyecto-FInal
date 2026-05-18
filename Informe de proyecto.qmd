@@ -1,0 +1,209 @@
+---
+title: |
+
+  Universidad  Nacional Autónoma de México  
+  
+  Facultad de Ciencias  
+  
+  Actuaría
+  
+  \vspace{1.5cm}
+  PROYECTO FINAL
+  
+  \LARGE \textbf COAHUILA
+  \vspace{1.5cm}
+  
+  Martínez Garduño Regina 
+  
+  Mejía Sandoval Karla Adriana 
+  
+  Dr. Víctor Manuel García Guerrero 
+  
+  Ayudantes: Andrés Gonzalo Peña Montalvo
+             Melani Aquino Cedillo
+  
+  Grupo: 9219
+
+format:
+  pdf:
+    documentclass: article
+    classoption: titlepage
+    toc: true
+    number-sections: true
+
+editor: visual
+---
+
+## Introducción
+
+Coahuila de Zaragoza, ubicado en el noreste de México, es una entidad que destaca por su extensión territorial, su alto nivel de urbanización, su desarrollo industrial y su papel estratégico dentro de la dinámica migratoria nacional e internacional. Al ser el tercer estado más grande del país, después de Chihuahua y Sonora, Coahuila posee una ubicación geográfica privilegiada que lo conecta tanto con otras regiones del norte de México como con la frontera de Estados Unidos. Esta posición ha influido de manera importante en su crecimiento económico, en la distribución de su población y en los movimientos migratorios que atraviesan su territorio.
+
+De acuerdo con el Censo de Población y Vivienda 2020 del INEGI, Coahuila contaba con 3,146,771 habitantes, con una distribución casi equilibrada entre mujeres y hombres. La mayor parte de su población reside en zonas urbanas, principalmente en municipios como Saltillo, Torreón, Ramos Arizpe, Monclova, Piedras Negras y Ciudad Acuña, los cuales concentran buena parte de la actividad económica, industrial y laboral del estado. Esta urbanización se relaciona directamente con el desarrollo de sectores productivos como el automotriz, metalúrgico, manufacturero y minero, que han convertido a Coahuila en un polo de atracción para trabajadores y familias provenientes de otras entidades del país. 
+
+En el ámbito sociodemográfico, Coahuila muestra rasgos de modernización social, como la disminución gradual de los nacimientos, el aumento de la esperanza de vida y un promedio de escolaridad superior a la media nacional. Estos elementos reflejan cambios en la estructura familiar, en las condiciones de vida y en la preparación educativa de su población. Al mismo tiempo, su estabilidad económica y su baja informalidad laboral han fortalecido su capacidad para atraer migración interna, especialmente hacia regiones como la Sureste, donde destacan Saltillo y Ramos Arizpe, y la Laguna, encabezada por Torreón.
+
+La migración constituye un aspecto fundamental para comprender la realidad actual de Coahuila. A nivel nacional, el estado recibe población de entidades como Nuevo León, Veracruz, San Luis Potosí y Zacatecas, principalmente por motivos laborales vinculados con la industria y la manufactura. Sin embargo, también ha funcionado históricamente como un estado expulsor hacia otros destinos del norte, particularmente Nuevo León, debido a oportunidades de empleo, educación o reunificación familiar. Esta doble condición muestra que Coahuila participa activamente en los procesos de movilidad interna del país.
+
+En cuanto a la migración internacional, la ubicación fronteriza de Coahuila le otorga un papel relevante como zona de tránsito, cruce, retorno y repatriación. Ciudades como Piedras Negras y Ciudad Acuña son puntos estratégicos en la movilidad de personas hacia Estados Unidos, así como en los procesos de devolución de connacionales y extranjeros. Por ello, las autoridades estatales y municipales han tenido que implementar estrategias de atención, incluyendo la habilitación de albergues y espacios temporales para responder a las necesidades de la población migrante.
+
+En conjunto, Coahuila puede entenderse como una entidad de gran importancia económica, demográfica y migratoria dentro del norte de México. Su desarrollo industrial, su perfil urbano, su cercanía con Estados Unidos y su capacidad para atraer población hacen de este estado un espacio clave para analizar los cambios sociales, laborales y territoriales que caracterizan a la región fronteriza mexicana.
+
+## Piramide de población de Coahuila 2026
+
+```{r}
+# 1. Instalar y cargar paquetes
+#install.packages("ggplot2", dependencies = TRUE)
+#install.packages("data.table", dependencies = TRUE)
+#install.packages("kableExtra")
+
+# 2. Cargar paquetes
+library(data.table)
+library(ggplot2)
+library(kableExtra)
+
+# 3. Remover los objetos
+rm(list = ls())
+
+# 4. Descargar datos
+pop <- fread("https://repodatos.atdt.gob.mx/CONAPO/proyecciones/00_Pob_Mitad_1950_2070.csv")
+
+
+# 5. Filtrar Coahuila 2026
+coah <- pop[ENTIDAD == "Coahuila" & ANIO == "2026",
+            .(SEXO, EDAD, POBLACION)]
+
+# 6. Preparar los datos para la pirámide
+pop_coah<- pop[ENTIDAD == "Coahuila" & ANIO == 2026, .(SEXO, EDAD, POBLACION)]
+
+# 7. Convertir población masculina a valores negativos para graficar
+pop_coah[, POBLACION := ifelse(SEXO == "Hombres",-POBLACION, POBLACION)]
+
+# 8. Graficar pirámide poblacional
+ggplot(pop_coah, aes(x = EDAD, y = POBLACION, fill = SEXO)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_flip() +
+  scale_y_continuous(labels = abs) +
+  labs(title = "Pirámide poblacional de Coahuila, 2026",
+       x = "Edad",
+       y = "Población") +
+  theme_minimal() +
+  scale_fill_manual(values = c("Hombres" = "steelblue", "Mujeres" = "pink"))
+```
+
+## Analisis de la piramide de distribución poblacional de Coahulila en 2026.
+
+La pirámide poblacional de Coahuila muestra una base más estrecha en comparación con los grupos de edad adulta, lo que indica que nacen menos niños que en décadas anteriores. Al mismo tiempo, se observa un mayor número de personas en edades adultas y avanzadas, lo que refleja que la población está envejeciendo.
+
+En el grupo de 0 a 14 años se aprecia una menor proporción de población, lo cual sugiere una disminución en los nacimientos. Esto puede tener consecuencias a futuro, ya que habrá menos personas que se incorporen a la vida laboral. Por otro lado, el grupo de 15 a 64 años concentra actualmente la mayor parte de la población, lo que representa una base importante para la actividad económica del estado.
+
+En cuanto a las personas de 65 años y más, se observa un aumento considerable. Esto indica que la población vive más años que antes. También se aprecia que en las edades más avanzadas hay ligeramente más mujeres que hombres, situación común debido a que las mujeres suelen tener mayor esperanza de vida.
+
+En general, la gráfica muestra que el estado de Coahuila enfrenta un proceso de envejecimiento poblacional. Esta situación puede generar retos en el futuro, como una mayor necesidad de servicios de salud y apoyo para las personas mayores, así como cambios en la organización económica y social del estado.
+
+## **Diagrama de flujo**
+
+![](PDF/Diagrama%20Proyecto.png)
+
+## **Formulas Utilizadas**
+
+*Tasa Específica de Mortalidad*
+
+$$ {}_nm_x = \frac{{}_nD_x}{{}_nN_x} $$
+
+donde:
+
+${}_nm_x$: Tasa de mortalidad entre las edades $x$ y $x+n$
+
+${}_nD_x$: Defunciones entre las edades $x$ y $x+n$
+
+${}_nN_x$: Población entre las edades $x$ y $x+n$
+
+*Suavizamiento por Media Móvil (3 años)* $$ {}_nD^s_x = \frac{{}_nD^{(y-1)}_x + {}_nD^{(y)}_x + {}_nD^{(y+1)}_x}{3} $$
+
+donde:
+
+${}_nD^s_x$: Defunciones suavizadas para el año $y$
+
+${}_nD^{(y-1)}_x$, ${}_nD^{(y)}_x$, ${}_nD^{(y+1)}_x$: Defunciones en los años $y-1$, $y$, $y+1$
+
+*Crecimiento Exponencial*
+
+Se utilizó el método de crecimiento exponencial para interpolar la población entre censos. La fórmula utilizada es:
+
+$$ N(t) = N_0 \cdot e^{r \cdot (t - t_0)} $$
+
+donde:
+
+-   $N(t)$: Población en el tiempo $t$
+
+-   $N_0$: Población inicial
+
+-   $r$: Tasa de crecimiento
+
+-   $t_0$: Tiempo inicial
+
+*Probabilidad de Supervivencia*
+
+$$ {}_np_x = 1 - {}_nq_x $$
+
+donde:
+
+${}_np_x$: Probabilidad de sobrevivir entre las edades $x$ y $x+n$
+
+*Tabla de Vida - Probabilidad de Muerte*
+
+$$ q_x = \frac{n \cdot m_x}{1 + (n - a_x) \cdot m_x} $$
+
+*Esperanza de Vida*
+
+$$ e_x = \frac{T_x}{l_x} $$
+
+*Descomposición de Arriaga*
+
+$$ \Delta e_0 = \sum \left[ \frac{l_x^A}{l_0^A} \left( \frac{L_x^B}{l_x^B} - \frac{L_x^A}{l_x^A} \right) + \frac{T_{x+1}^B}{l_0^B} \left( \frac{l_x^A}{l_x^B} - \frac{l_{x+1}^A}{l_{x+1}^B} \right) \right] $$
+
+*Cálculo de Sobrevivientes* $$ l_{x+n} = l_x \cdot {}_np_x $$donde:
+
+-   $l_{x+n}$: Número de sobrevivientes a la edad $x+n$
+
+-   $l_x$: Número de sobrevivientes a la edad $x$
+
+-   ${}_np_x$: Probabilidad de supervivencia entre $x$ y $x+n$
+
+*Cálculo de Defunciones entre Edades*
+
+$$ {}_nd_x = l_x - l_{x+n} $$
+
+o alternativamente:
+
+$$ {}_nd_x = l_x \cdot {}_nq_x $$
+
+donde:
+
+${}_nd_x$: Defunciones ocurridas entre las edades $x$ y $x+n$
+
+${}_nq_x$: Probabilidad de morir entre $x$ y $x+n$
+
+*Años-Persona Vividos entre Edades*
+
+$$ {}_nL_x = (n \cdot l_{x+n}) + ({}_na_x \cdot {}_nd_x) $$
+
+Para el último grupo de edad: $$ {}_{\infty}L_{x^*} = \frac{l_{x^*}}{{}_{\infty}m_{x^*}} $$
+
+*Años-Persona por Vivir* $$ T_x = \sum_{a=x}^{\omega} {}_nL_a $$
+
+*Esperanza de Vida*
+
+$$
+e_x = \frac{T_x}{l_x}
+$$
+
+## Bibliografía:
+
+● De Estadística y Geografía, I. N. (s. f.-a). Tabulados Interactivos-Genéricos. <https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=Natalidad_Natalidad_01_01e3096f-fc70-408e-a6e4-> 82d8e3bee474
+
+● De Estadística y Geografía, I. N. (s. f.-b). Tabulados Interactivos-Genéricos. <https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=Poblacion_Poblacion_03_13b8bdfc-8744-4623-a652-> 03cb6901fd47#:\~:text=Table_content:%20header:%20%7C%20Entidad%20federativa%20%7C%202000,%7C%202 000:%201.5%20%7C%202020:%201.4%20%7C
+
+● Patiño, D. G. (2025, 16 junio). Con una esperanza de vida de 77.2 años, Coahuila llega a más de 3.3 millones de habitantes y Saltillo a 923 mil. Vanguardia. <https://vanguardia.com.mx/coahuila/con-una-esperanza-de-vida-de-772-> anos-coahuila-llega-a-mas-de-33-millones-de-habitantes-y-saltillo-a-923-mil-GF16311326
+
+●<https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2021/EstSociodemo/ResultCenso2020_Coah.pdf#:~:tex> t=La%20poblaci%C3%B3n%20total%20en%20Coahuila%20de%20Zaragoza,y%201%20563%20669%20son%20ho mbres%20(49.7%25).
