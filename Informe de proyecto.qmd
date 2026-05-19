@@ -198,7 +198,308 @@ $$
 e_x = \frac{T_x}{l_x}
 $$
 
-## Bibliografía:
+## Cálculo de Años Persona Vividos (APV) y Pirámides Poblacionales
+
+```{r, warning=FALSE, message=FALSE}
+# ==============================================================================
+# Cálculo de Años Persona Vividos (APV) y Pirámides Poblacionales: Coahuila
+# ==============================================================================
+
+# Carga de paquetes ----
+library(readxl)
+library(reshape2)
+library(lubridate)
+library(ggplot2)
+library(data.table)
+library(dplyr)
+
+# Definición de la función expo (Incrustada para evitar el uso de archivos externos) ----
+expo <- function(pop_0, pop_T, t_0, t_T, t) {
+  # Convertir fechas a años decimales
+  date_0 <- decimal_date(ymd(t_0))
+  date_T <- decimal_date(ymd(t_T))
+  
+  # Tiempo transcurrido entre censos
+  time_span <- date_T - date_0
+  
+  # Tasa de crecimiento exponencial (r)
+  r <- log(pop_T / pop_0) / time_span
+  
+  # Estimación de la población al tiempo de interés 't'
+  pop_t <- pop_0 * exp(r * (t - date_0))
+  
+  return(pop_t)
+}
+
+# Carga de tabla de datos ----
+# (Asegúrate de haber corrido antes tu script de limpieza con los datos de Coahuila)
+censos_pro <- fread("Data/censos_pro.csv")
+
+
+# ==============================================================================
+# 1. CÁLCULO DE APV (POBLACIÓN A MITAD DE AÑO) ----
+# ==============================================================================
+
+# --- Año 2010 ---
+N_2010 <- expo(censos_pro[year==2010] %>% .$pop, 
+               censos_pro[year==2020] %>% .$pop, 
+               t_0 = "2010-06-25", t_T = "2020-03-15", t = 2010.5)
+
+apv2010 <- censos_pro[year==2010, .(age, sex)]
+apv2010[, `:=`(N = N_2010, year = 2010)]
+
+
+# --- Año 2019 ---
+N_2019 <- expo(censos_pro[year==2010] %>% .$pop, 
+               censos_pro[year==2020] %>% .$pop, 
+               t_0 = "2010-06-25", t_T = "2020-03-15", t = 2019.5)
+
+apv2019 <- censos_pro[year==2020, .(age, sex)]
+apv2019[, `:=`(N = N_2019, year = 2019)]
+
+
+# --- Año 2021 ---
+N_2021 <- expo(censos_pro[year==2010] %>% .$pop, 
+               censos_pro[year==2020] %>% .$pop, 
+               t_0 = "2010-06-25", t_T = "2020-03-15", t = 2021.5)
+
+apv2021 <- censos_pro[year==2020, .(age, sex)]
+apv2021[, `:=`(N = N_2021, year = 2021)]
+
+
+# --- Consolidar y guardar tablas históricas de APV ---
+apv <- rbind(apv2010, apv2019, apv2021)
+write.csv(apv, "Data/apv.csv", row.names = FALSE)
+
+
+# ==============================================================================
+# 2. PROCESAMIENTO QUINQUENAL PARA GRÁFICOS ----
+# ==============================================================================
+
+apv_quinquenal <- copy(apv)
+
+# Definir grupos quinquenales estándares (0-4, 5-9, ..., 85+)
+apv_quinquenal[, age_group := cut(age, 
+                                  breaks = c(0, seq(5, 85, by = 5), Inf),
+                                  labels = c("0-4", "5-9", "10-14", "15-19", "20-24", 
+                                             "25-29", "30-34", "35-39", "40-44", "45-49",
+                                             "50-54", "55-59", "60-64", "65-69", "70-74",
+                                             "75-79", "80-84", "85+"),
+                                  right = FALSE)]
+
+# Sumar la población (N) por año, grupo quinquenal y sexo
+apv_quinquenal <- apv_quinquenal[, .(N = sum(N, na.rm = TRUE)), by = .(year, age_group, sex)]
+
+# Asegurar el orden correcto de los factores de edad en el eje
+apv_quinquenal$age_group <- factor(apv_quinquenal$age_group, 
+                                   levels = c("0-4", "5-9", "10-14", "15-19", "20-24", 
+                                              "25-29", "30-34", "35-39", "40-44", "45-49",
+                                              "50-54", "55-59", "60-64", "65-69", "70-74",
+                                              "75-79", "80-84", "85+"))
+
+
+# ==============================================================================
+# 3. GENERACIÓN DE PIRÁMIDES POBLACIONALES (COAHUILA) ----
+# ==============================================================================
+
+# Asegurar que existan las carpetas de destino para que ggsave no falle
+if(!dir.exists("images/apv")) dir.create("images/apv", recursive = TRUE)
+
+# --- Gráfica Coahuila 2010 ---
+ggplot(apv_quinquenal[year == 2010], aes(x = age_group, y = ifelse(sex == "male", -N/1e6, N/1e6), fill = sex)) +
+  geom_col(width = 0.7, alpha = 0.8) +
+  coord_flip() +
+  scale_y_continuous(
+    labels = function(x) paste0(abs(x), "M"),
+    breaks = scales::pretty_breaks(n = 8)
+  ) +
+  scale_fill_manual(
+    values = c("male" = "#2c7fb8", "female" = "#fa9fb5"),
+    labels = c("male" = "Hombres", "female" = "Mujeres")
+  ) +
+  labs(
+    title = "Pirámide Poblacional de Coahuila 2010",
+    subtitle = "Distribución por grupos quinquenales de edad y sexo",
+    x = "Grupo de edad",
+    y = "Población mitad de año (millones)",    
+    fill = "Sexo",
+    caption = "Fuente: INEGI"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray40"),
+    axis.text.y = element_text(size = 8),
+    panel.grid.major.y = element_blank()
+  )
+ggsave("images/apv/apv_2010.png", width = 10, height = 6, dpi = 300)
+
+
+# --- Gráfica Coahuila 2019 ---
+ggplot(apv_quinquenal[year == 2019], aes(x = age_group, y = ifelse(sex == "male", -N/1e6, N/1e6), fill = sex)) +
+  geom_col(width = 0.7, alpha = 0.8) +
+  coord_flip() +
+  scale_y_continuous(
+    labels = function(x) paste0(abs(x), "M"),
+    breaks = scales::pretty_breaks(n = 8)
+  ) +
+  scale_fill_manual(
+    values = c("male" = "#2c7fb8", "female" = "#fa9fb5"),
+    labels = c("male" = "Hombres", "female" = "Mujeres")
+  ) +
+  labs(
+    title = "Pirámide Poblacional de Coahuila 2019",
+    subtitle = "Distribución por grupos quinquenales de edad y sexo",
+    x = "Grupo de edad",
+    y = "Población mitad de año (millones)",    
+    fill = "Sexo",
+    caption = "Fuente: INEGI"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray40"),
+    axis.text.y = element_text(size = 8),
+    panel.grid.major.y = element_blank()
+  )
+ggsave("images/apv/apv_2019.png", width = 10, height = 6, dpi = 300)
+
+
+# --- Gráfica Coahuila 2021 ---
+ggplot(apv_quinquenal[year == 2021], aes(x = age_group, y = ifelse(sex == "male", -N/1e6, N/1e6), fill = sex)) +
+  geom_col(width = 0.7, alpha = 0.8) +
+  coord_flip() +
+  scale_y_continuous(
+    labels = function(x) paste0(abs(x), "M"),
+    breaks = scales::pretty_breaks(n = 8)
+  ) +
+  scale_fill_manual(
+    values = c("male" = "#2c7fb8", "female" = "#fa9fb5"),
+    labels = c("male" = "Hombres", "female" = "Mujeres")
+  ) +
+  labs(
+    title = "Pirámide Poblacional de Coahuila 2021",
+    subtitle = "Distribución por grupos quinquenales de edad y sexo",
+    x = "Grupo de edad",
+    y = "Población mitad de año (millones)",    
+    fill = "Sexo",
+    caption = "Fuente: INEGI"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    plot.subtitle = element_text(hjust = 0.5, color = "gray40"),
+    axis.text.y = element_text(size = 8),
+    panel.grid.major.y = element_blank()
+  )
+ggsave("images/apv/apv_2021.png", width = 10, height = 6, dpi = 300)
+
+```
+
+## ANÁLISIS DE PIRÁMIDES
+
+## 1. Pirámide Poblacional de Coahuila, 2010 (Fuente: INEGI)
+
+### Forma general
+
+-   Pirámide de tipo **progresiva o expansiva**, característica de poblaciones jóvenes con alta natalidad y mortalidad decreciente.
+
+-   Base relativamente ancha, aunque con cierta reducción en los primeros grupos (5–9 y 10–14 años).
+
+### Distribución por sexo
+
+-   **Hombres** y **mujeres** muestran volúmenes similares en la mayoría de los grupos de edad.
+
+-   En edades avanzadas (70–74 a 85+), se observa un **mayor porcentaje de mujeres**, fenómeno esperado por la mayor esperanza de vida femenina.
+
+### Grupos de edad destacados
+
+-   **Mayor concentración**: grupos de 10–14, 15–19 y 20–24 años, lo que indica una población joven en edad escolar y de ingreso al mercado laboral.
+
+-   **Estrechamiento en la base** (grupos 5–9 ligeramente más pequeños que 10–14) sugiere un **inicio de disminución de la natalidad** en años previos a 2010.
+
+-   **Cúspide reducida**: pocas personas en edades de 80 años o más, típico de poblaciones con baja esperanza de vida en el pasado.
+
+### Interpretación demográfica
+
+Coahuila en 2010 se encontraba en una **transición demográfica avanzada**, con signos de envejecimiento incipiente pero aún con una estructura joven. La población en edad productiva (15–64 años) es amplia, lo que representa un **bono demográfico** potencial.
+
+## 2. Pirámide Poblacional de Coahuila, 2019 (Fuente: INE)
+
+### Forma general
+
+-   Se observa un **estrechamiento progresivo de la base** en comparación con 2010.
+
+-   La pirámide comienza a adquirir una **forma de campana o rectangular**, indicando un **envejecimiento poblacional** más notorio.
+
+### Distribución por sexo
+
+-   Persiste el predominio femenino en los grupos de 75 años y más.
+
+-   En edades medias (30–59 años), la estructura es equilibrada entre sexos.
+
+### Grupos de edad destacados
+
+-   **Grupos más numerosos**: 20–24, 25–29, 30–34 y 35–39 años, lo que refleja un **desplazamiento del bulto poblacional hacia la adultez**.
+
+-   **Base más angosta** (5–9 y 10–14 años) confirma una **reducción sostenida de la fecundidad**.
+
+-   **Cúspide más ancha** que en 2010, especialmente en mujeres de 80–84 y 85+, evidenciando **aumento de la longevidad**.
+
+### Interpretación demográfica
+
+Para 2019, Coahuila muestra una clara **transición hacia una población envejecida**. El bono demográfico aún se mantiene, pero la proporción de jóvenes disminuye, lo que puede implicar menores presiones sobre la educación infantil pero mayores demandas futuras de servicios de salud y pensiones.
+
+## 3. Pirámide Poblacional de Coahuila, 2021 (Fuente: INEGI)
+
+### Forma general
+
+-   La pirámide se asemeja más a una **estructura estacionaria-regresiva**, con base reducida y cuerpos central y superior ensanchados.
+
+-   Se acentúa la **tendencia al envejecimiento**.
+
+### Distribución por sexo
+
+-   Dominio femenino en los grupos de 70 años y más, particularmente en 85+.
+
+-   En edades productivas (15–64 años), la relación por sexo es casi igualitaria.
+
+### Grupos de edad destacados
+
+-   **Máxima concentración** en los grupos de 25–29, 30–34 y 35–39 años, indicando que la cohorte más grande ya se encuentra en la adultez media.
+
+-   **Base aún más estrecha** (5–9 y 10–14 años) confirma una baja natalidad persistente.
+
+-   **Aumento notable en el grupo de 85+**respecto a años anteriores, sobre todo en mujeres.
+
+### Interpretación demográfica
+
+En 2021, Coahuila presenta una población **claramente envejecida**, con tasas de natalidad bajas y una esperanza de vida elevada. El bono demográfico comienza a agotarse, y se avecinan **desafíos económicos y sociales** relacionados con el cuidado de adultos mayores, sistemas de salud y pensiones.
+
+## Comparativa general (2010 → 2021)
+
+| Indicador | 2010 | 2019 | 2021 | Tendencia |
+|:---|:---|:---|:---|:---|
+| **Anchura de la base** | Moderada | Estrecha | Muy estrecha | ↓ Descenso de natalidad |
+| **Grupo más poblado** | 10–24 años | 20–39 años | 25–39 años | ↑ Envejecimiento de cohortes |
+| **Cúspide (85+)** | Reducida | Más ancha | Aún más ancha | ↑ Aumento de longevidad |
+| **Predominio femenino en edades avanzadas** | Presente | Notorio | Muy notorio | ↑ Brecha de género en longevidad |
+| **Forma de la pirámide** | Progresiva | Transicional | Estacionaria-regresiva | Evolución hacia envejecimiento |
+
+## Conclusiones 
+
+1.  **Coahuila ha transitado rápidamente** de una población joven (2010) a una población madura con rasgos de envejecimiento (2021).
+
+2.  La **fecundidad ha disminuido**notablemente, lo que se refleja en la base estrecha de las pirámides más recientes.
+
+3.  El **envejecimiento de la cúspide** implica mayores necesidades de infraestructura geriátrica, cuidados paliativos y sistemas de pensiones.
+
+4.  El **bono demográfico** aún es aprovechable en el corto plazo (alta proporción de adultos en edad laboral), pero se reducirá en la próxima década.
+
+## Bibliografía
 
 ● De Estadística y Geografía, I. N. (s. f.-a). Tabulados Interactivos-Genéricos. <https://www.inegi.org.mx/app/tabulados/interactivos/?pxq=Natalidad_Natalidad_01_01e3096f-fc70-408e-a6e4-> 82d8e3bee474
 
