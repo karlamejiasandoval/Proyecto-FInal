@@ -210,7 +210,7 @@ $$
 e_x = \frac{T_x}{l_x}
 $$
 
-## **Código para los cálculos**
+## **CÓDIGOS PARA LOS CÁLCULOS** 
 
 ## Cálculo de Años Persona Vividos (APV) y Pirámides Poblacionales
 
@@ -1741,6 +1741,826 @@ En 2021, Coahuila presenta una población **claramente envejecida**, con tasas 
 3.  El **envejecimiento de la cúspide** implica mayores necesidades de infraestructura geriátrica, cuidados paliativos y sistemas de pensiones.
 
 4.  El **bono demográfico** aún es aprovechable en el corto plazo (alta proporción de adultos en edad laboral), pero se reducirá en la próxima década.
+
+    ## Análisis de la Curva de Supervivencia (lx) – Coahuila, 2010, 2019 y 2021
+
+    La función de supervivencia lxl_xlx​ representa el número de personas que permanecen vivas a cada edad exacta xxx dentro de una cohorte hipotética inicial de 100,000 nacimientos. Permite evaluar la intensidad de la mortalidad a lo largo del ciclo de vida y comparar diferencias por sexo y periodo.
+
+    ### Año 2010
+
+    En 2010 se observa una supervivencia elevada durante las primeras décadas de vida para ambos sexos. La cohorte femenina mantiene sistemáticamente niveles de supervivencia superiores a la masculina.
+
+    -    Hasta aproximadamente los 40 años, las diferencias entre hombres y mujeres son relativamente pequeñas.
+
+    -    A partir de los 50 años comienza una divergencia más marcada entre ambas curvas.
+
+    -    Los hombres presentan una reducción más acelerada de sobrevivientes entre los 55 y 75 años.
+
+    -    Las mujeres mantienen una supervivencia más elevada durante toda la vejez.
+
+    Alrededor de los 80 años aún sobreviven cerca de 20 mil mujeres, mientras que el número de hombres sobrevivientes es considerablemente menor. Esto refleja la sobremortalidad masculina asociada a enfermedades crónicas, factores conductuales y causas externas.
+
+    ### Año 2019
+
+    Las curvas de 2019 muestran una mejora general respecto a 2010.
+
+    -    La disminución de sobrevivientes se desplaza hacia edades más avanzadas.
+
+    -    La supervivencia femenina continúa siendo superior en todo el ciclo de vida.
+
+    -    El descenso pronunciado de la curva masculina ocurre algunos años después que en 2010.
+
+    -    La cantidad de sobrevivientes a edades avanzadas aumenta para ambos sexos.
+
+    La curva femenina presenta una mayor rectangularización, fenómeno típico de poblaciones con baja mortalidad, donde la mayoría de los individuos sobreviven hasta edades relativamente avanzadas y las defunciones se concentran en la vejez.
+
+    Este comportamiento sugiere mejoras en las condiciones sanitarias, acceso a servicios de salud y control de enfermedades durante la década.
+
+    ### Año 2021
+
+    Las curvas de 2021 mantienen el patrón observado en 2019.
+
+    -    La supervivencia continúa siendo más alta para las mujeres.
+
+    -    Las pérdidas de población antes de los 60 años son reducidas.
+
+    -    La caída de la supervivencia se concentra principalmente después de los 65 años.
+
+    -    Se observa una ligera disminución de la supervivencia respecto a lo esperado para una trayectoria creciente entre 2019 y 2021.
+
+    Este comportamiento puede estar relacionado con el impacto de la pandemia de COVID-19, particularmente en edades adultas y avanzadas, donde la mortalidad aumentó significativamente.
+
+    Sin embargo, la ventaja femenina permanece claramente visible en todas las edades.
+
+    ## Comparación Temporal de la Supervivencia
+
+    ### Evolución general
+
+    Las tres curvas muestran el patrón típico de una población en transición demográfica avanzada:
+
+    1.   Mortalidad infantil relativamente baja.
+
+    2.   Alta supervivencia durante la infancia y adultez temprana.
+
+    3.   Concentración de las defunciones en edades avanzadas
+
+    Entre 2010 y 2019 se observa:
+
+    -    Incremento de la supervivencia en prácticamente todas las edades.
+
+    -    Mayor número de personas alcanzando edades avanzadas.
+
+    -    Desplazamiento de la mortalidad hacia edades más altas.
+
+    Entre 2019 y 2021:
+
+    -    Las diferencias son menores.
+
+    -    Se aprecia una posible desaceleración en las ganancias de supervivencia.
+
+    -    Persisten los efectos de mortalidad asociados a la pandemia.
+
+    ### Diferencias por sexo
+
+    En los tres años:
+
+    -    Las mujeres presentan mayores probabilidades de supervivencia.
+
+    -    La brecha se amplía después de los 50 años.
+
+    -    Los hombres experimentan una pérdida más rápida de sobrevivientes en la vejez.
+
+    Este patrón coincide con la evidencia demográfica internacional sobre la ventaja femenina en mortalidad.
+
+    # Análisis de la Esperanza de Vida Remanente (ex)
+
+    La esperanza de vida remanente exe_xex​ indica el número promedio de años que le quedan por vivir a una persona que ha alcanzado la edad exacta xxx.
+
+    ### Año 2010
+
+    En 2010:
+
+    -    Alrededor de los 10 años, las mujeres presentan una esperanza de vida cercana a 65 años adicionales.
+
+    -    Los hombres muestran aproximadamente 58–60 años adicionales.
+
+    -    La diferencia inicial es cercana a 5 años.
+
+    Conforme aumenta la edad:
+
+    -    La esperanza de vida disminuye gradualmente.
+
+    -    La ventaja femenina se mantiene durante todo el ciclo vital.
+
+    -    Incluso en edades avanzadas las mujeres conservan mayores años esperados de vida.
+
+    La pendiente relativamente pronunciada indica que la mortalidad aún era más elevada que en los años posteriores.
+
+    ### Año 2019
+
+    Las curvas de 2019 se ubican ligeramente por encima de las de 2010.
+
+    Esto significa que:
+
+    -    Las personas pueden esperar vivir más años en prácticamente todas las edades.
+
+    -    El aumento es observable tanto en hombres como en mujeres.
+
+    -    Las mujeres continúan manteniendo una ventaja considerable.
+
+    Por ejemplo:
+
+    -    A los 30 años la esperanza de vida remanente es mayor que en 2010.
+
+    -    A los 60 años aún se observan ganancias importantes respecto al periodo anterior.
+
+    Estas mejoras son consistentes con la reducción de la mortalidad observada en la función de supervivencia.
+
+    ### Año 2021
+
+    En 2021:
+
+    -    La esperanza de vida sigue siendo elevada.
+
+    -    Las mujeres conservan la ventaja sobre los hombres.
+
+    -    Las curvas parecen ligeramente inferiores a las de 2019 en algunas edades.
+
+    Esto puede interpretarse como una reducción temporal de los años esperados de vida derivada del aumento de la mortalidad durante la pandemia.
+
+    Sin embargo:
+
+    -    La estructura general de la curva permanece estable.
+
+    -    La esperanza de vida continúa siendo mayor que la observada una década atrás.
+
+    # Conclusiones Generales
+
+    1.  **Las mujeres presentan mejores condiciones de supervivencia y mayor esperanza de vida en los tres años analizados.**
+
+    2.   **Entre 2010 y 2019 se observa una mejora importante en la supervivencia y en la esperanza de vida remanente**, reflejando avances sanitarios y epidemiológicos.
+
+    3.   **Las ganancias observadas hasta 2019 parecen moderarse en 2021**, probablemente por el efecto de la pandemia de COVID-19.
+
+    4.  **La mortalidad se concentra cada vez más en edades avanzadas**, fenómeno característico de poblaciones con niveles relativamente bajos de mortalidad.
+
+    5.  **La brecha de género persiste durante todo el periodo**, siendo especialmente visible después de los 50 años, donde la supervivencia femenina supera claramente a la masculina.
+
+    6.   **El aumento de sobrevivientes a edades avanzadas implica un proceso de envejecimiento demográfico**, con mayores demandas futuras de servicios de salud, cuidados de largo plazo y sistemas de protección social.
+
+    ### En general
+
+    >  El análisis de las funciones de supervivencia y esperanza de vida remanente para Coahuila muestra una mejora general de las condiciones de mortalidad entre 2010 y 2019, reflejada en una mayor proporción de individuos que alcanzan edades avanzadas y en un incremento de los años promedio de vida restantes. Las mujeres mantienen sistemáticamente niveles superiores de supervivencia y esperanza de vida respecto a los hombres. Para 2021 se observa una ligera desaceleración en las ganancias alcanzadas durante la década anterior, posiblemente asociada al incremento temporal de la mortalidad provocado por la pandemia de COVID-19. En conjunto, los resultados evidencian una población cada vez más longeva y un proceso sostenido de envejecimiento demográfico en el estado de Coahuila.
+
+## Análisis detallado de la esperanza de vida al nacer (e₀) por sexo y año de referencia. Coahuila
+
+La esperanza de vida al nacer (e0e_0e0​) representa el número promedio de años que se espera viva una persona recién nacida si las condiciones de mortalidad observadas en un determinado año permanecieran constantes durante toda su vida. Este indicador sintetiza el nivel general de mortalidad de una población y constituye una de las medidas más importantes para evaluar las condiciones de salud y bienestar.
+
+### Resultados observados
+
+| Año  | Mujeres | Hombres | Diferencia |
+|------|---------|---------|------------|
+| 2010 | 66.39   | 58.93   | 7.46       |
+| 2019 | 68.03   | 60.31   | 7.72       |
+| 2021 | 64.20   | 56.91   | 7.29       |
+
+## Análisis por año
+
+### 2010
+
+En 2010, la esperanza de vida al nacer para las mujeres fue de **66.39 años**, mientras que para los hombres fue de **58.93 años**.
+
+La diferencia entre ambos sexos alcanzó aproximadamente **7.5 años**, evidenciando una clara ventaja femenina en términos de supervivencia. Este comportamiento es consistente con los patrones demográficos observados tanto en México como en otros países, donde las mujeres suelen presentar menores riesgos de mortalidad a lo largo de la vida.
+
+La menor esperanza de vida masculina puede estar asociada a:
+
+-    Mayor exposición a accidentes y causas externas de muerte.
+
+-    Mayor prevalencia de conductas de riesgo.
+
+-    Mortalidad más elevada por enfermedades cardiovasculares y crónicas.
+
+-    Menor utilización preventiva de servicios de salud.
+
+### 2019
+
+Para 2019 se observa una mejora importante en ambos grupos.
+
+-    Las mujeres alcanzan una esperanza de vida de **68.03 años**.
+
+-    Los hombres alcanzan **60.31 años**.
+
+Respecto a 2010:
+
+-    Las mujeres ganaron **1.64 años** de vida.
+
+-    Los hombres ganaron **1.38 años**.
+
+Este incremento refleja avances en:
+
+-    Atención médica.
+
+-    Cobertura sanitaria.
+
+-    Prevención de enfermedades.
+
+-    Condiciones socioeconómicas.
+
+Además, la brecha entre hombres y mujeres aumentó ligeramente hasta **7.72 años**, lo que indica que las mejoras en supervivencia beneficiaron en mayor medida a las mujeres.
+
+El año 2019 presenta los niveles más altos de esperanza de vida de todo el periodo analizado, sugiriendo un contexto favorable de mortalidad antes de la pandemia.
+
+### 2021
+
+En 2021 se observa una disminución significativa de la esperanza de vida:
+
+-    Mujeres: **64.20 años**.
+
+-    Hombres: **56.91 años**.
+
+Comparado con 2019:
+
+-    Las mujeres pierden **3.83 años** de esperanza de vida.
+
+-    Los hombres pierden **3.40 años**.
+
+La reducción es considerable y rompe la tendencia creciente observada entre 2010 y 2019.
+
+La explicación más probable es el incremento extraordinario de la mortalidad asociado a la pandemia de COVID-19, que afectó especialmente a las edades adultas y avanzadas.
+
+A pesar de esta disminución:
+
+-    Las mujeres continúan presentando una mayor esperanza de vida.
+
+-    La brecha de género permanece cercana a los 7 años.
+
+## Evolución temporal
+
+### Periodo 2010–2019
+
+Durante esta etapa se observa una mejora sostenida:
+
+68.03−66.39=1.64 años 68.03 - 66.39 = 1.64 \text{años}68.03−66.39=1.64 años
+
+para mujeres, y
+
+60.31−58.93=1.38 años 60.31 - 58.93 = 1.38 \text{años}60.31−58.93=1.38 años
+
+para hombres.
+
+Estos resultados reflejan una reducción gradual de la mortalidad y un aumento de la longevidad.
+
+### Periodo 2019–2021
+
+Durante este periodo ocurre una reversión temporal:
+
+64.20−68.03=−3.83 años64.20 - 68.03 = -3.83 \text{ años}64.20−68.03=−3.83 años
+
+para mujeres, y
+
+56.91−60.31=−3.40 años 56.91 - 60.31 = -3.40 \text{ años}56.91−60.31=−3.40 años
+
+para hombres.
+
+La magnitud de estas pérdidas es mayor que las ganancias acumuladas durante la década anterior, lo que evidencia el fuerte impacto demográfico de la pandemia.
+
+## Diferencias por sexo
+
+La ventaja femenina es constante en los tres años analizados.
+
+### Brecha de esperanza de vida
+
+| Año  | Diferencia mujeres-hombres |
+|------|----------------------------|
+| 2010 | 7.46 años                  |
+| 2019 | 7.72 años                  |
+| 2021 | 7.29 años                  |
+
+Las mujeres viven en promedio entre **7 y 8 años más que los hombres**.
+
+Esta diferencia puede atribuirse a factores biológicos, conductuales y sociales:
+
+-    Menor mortalidad femenina en casi todos los grupos de edad.
+
+-    Menor incidencia de muertes violentas.
+
+-    Menores niveles de exposición a riesgos laborales.
+
+-    Mayor utilización de servicios de salud preventivos.
+
+## Interpretación demográfica
+
+Los resultados muestran tres fenómenos importantes:
+
+### 1. Incremento de la longevidad hasta 2019
+
+La población de Coahuila experimentó una mejora sostenida de sus condiciones de supervivencia durante la década previa a la pandemia.
+
+### 2. Impacto de la pandemia en 2021
+
+La disminución observada en ambos sexos indica un aumento extraordinario de la mortalidad, particularmente en edades adultas y avanzadas, reduciendo de forma importante la esperanza de vida.
+
+### 3. Persistencia de la ventaja femenina
+
+A pesar de las variaciones temporales, las mujeres mantienen consistentemente mayores niveles de supervivencia y longevidad.
+
+### En general 
+
+> La esperanza de vida al nacer en Coahuila muestra una tendencia creciente entre 2010 y 2019, pasando de 66.39 a 68.03 años para las mujeres y de 58.93 a 60.31 años para los hombres, reflejando mejoras en las condiciones generales de mortalidad. Sin embargo, en 2021 se observa una disminución importante de este indicador, alcanzando 64.20 años para las mujeres y 56.91 años para los hombres, situación que puede asociarse al incremento de la mortalidad provocado por la pandemia de COVID-19. A lo largo de todo el periodo, las mujeres mantienen una ventaja de aproximadamente siete años sobre los hombres
+
+# Análisis de la Descomposición de Arriaga de los Cambios en la Esperanza de Vida – Coahuila
+
+La descomposición de Arriaga permite identificar cuánto contribuye cada grupo de edad al cambio total observado en la esperanza de vida entre dos periodos. Las barras positivas indican edades donde la reducción de la mortalidad aumentó la esperanza de vida, mientras que las barras negativas representan edades donde el incremento de la mortalidad redujo la esperanza de vida.
+
+La figura compara dos periodos: **2010-2019** y **2019-2021**, diferenciando además los resultados para mujeres y hombres.
+
+# Periodo 2010-2019
+
+## Mujeres
+
+Durante este periodo todas las contribuciones son prácticamente positivas, indicando una mejora generalizada de la supervivencia.
+
+Las mayores ganancias se concentran en:
+
+-    Edades de 15 a 35 años.
+
+-    Edades de 55 a 75 años.
+
+Las contribuciones más elevadas aparecen entre los **60 y 75 años**, donde cada grupo de edad aporta aproximadamente entre 0.15 y 0.20 años al aumento de la esperanza de vida.
+
+Esto sugiere que la reducción de la mortalidad en edades avanzadas fue el principal motor del incremento observado en la esperanza de vida femenina.
+
+Por otra parte:
+
+-    La infancia y adolescencia muestran contribuciones pequeñas.
+
+-    Entre los 40 y 50 años las ganancias son moderadas.
+
+En conjunto, la mejora estuvo distribuida a lo largo del ciclo vital, aunque con un peso claramente mayor en la población adulta mayor.
+
+## Hombres
+
+Los hombres muestran un patrón similar.
+
+Las mayores contribuciones positivas se observan en:
+
+-    15 a 35 años.
+
+-    50 a 75 años.
+
+Particularmente, los grupos de edad entre **55 y 70 años** presentan los mayores aportes al incremento de la esperanza de vida.
+
+Esto indica que durante la década se produjo una reducción importante de la mortalidad masculina en edades adultas y avanzadas.
+
+No obstante, se aprecia una pequeña contribución negativa alrededor de los 40 años, aunque su magnitud es muy reducida y prácticamente no afecta la tendencia general.
+
+## Interpretación general 2010-2019
+
+La evidencia muestra que las ganancias en esperanza de vida durante este periodo no provinieron principalmente de la reducción de la mortalidad infantil, sino de la disminución de la mortalidad en edades adultas y de vejez.
+
+Este patrón es característico de poblaciones que han avanzado en la transición epidemiológica, donde:
+
+-    La mortalidad infantil ya es relativamente baja.
+
+-    Los mayores incrementos en longevidad dependen de mejoras en la supervivencia de adultos y adultos mayores.
+
+-    Las enfermedades crónicas y degenerativas adquieren mayor importancia.
+
+En consecuencia, el aumento observado en la esperanza de vida entre 2010 y 2019 puede atribuirse principalmente a mejoras en la atención médica, el tratamiento de enfermedades cardiovasculares y el aumento de la supervivencia en edades avanzadas.
+
+# Periodo 2019-2021
+
+## Mujeres
+
+La situación cambia drásticamente entre 2019 y 2021.
+
+La mayoría de las contribuciones son negativas, indicando una disminución de la esperanza de vida.
+
+Las pérdidas más importantes se concentran entre:
+
+-    45 y 80 años.
+
+El máximo impacto negativo ocurre aproximadamente entre los **60 y 75 años**, donde algunos grupos de edad contribuyen con pérdidas cercanas a **−0.50 años**.
+
+Estas edades coinciden con los grupos poblacionales más afectados por la pandemia de COVID-19.
+
+En contraste:
+
+-    Las edades infantiles presentan contribuciones cercanas a cero.
+
+-    Algunas edades jóvenes incluso muestran pequeñas contribuciones positivas.
+
+Sin embargo, estas ganancias son insuficientes para compensar las fuertes pérdidas observadas en edades avanzadas.
+
+## Hombres
+
+Los hombres presentan un patrón similar, aunque con una intensidad ligeramente mayor.
+
+Las contribuciones negativas comienzan antes, aproximadamente desde los 25 años.
+
+Las pérdidas más severas se concentran entre:
+
+-    40 y 80 años.
+
+Los grupos entre **55 y 70 años** registran las mayores reducciones, alcanzando contribuciones cercanas a **−0.50 años**.
+
+Este comportamiento es consistente con la evidencia nacional e internacional que documenta una mayor mortalidad masculina asociada a COVID-19.
+
+Además:
+
+-    Las contribuciones negativas abarcan un rango más amplio de edades que en las mujeres.
+
+-    La recuperación observada después de los 80 años es más limitada.
+
+# Comparación entre sexos
+
+## 2010-2019
+
+Durante la etapa de crecimiento de la esperanza de vida:
+
+-    Ambos sexos obtuvieron ganancias importantes.
+
+-    Las mejoras provinieron principalmente de edades adultas y avanzadas.
+
+-    Las mujeres muestran contribuciones ligeramente mayores después de los 60 años.
+
+Esto ayudó a ampliar la ventaja femenina observada en la esperanza de vida.
+
+## 2019-2021
+
+Durante la etapa de disminución:
+
+-    Ambos sexos experimentan pérdidas importantes.
+
+-    Los hombres presentan una afectación más extensa en términos de edades involucradas.
+
+-    Las mujeres concentran las pérdidas en edades más avanzadas.
+
+La mayor vulnerabilidad masculina coincide con los patrones observados en la mortalidad por COVID-19 y otras enfermedades asociadas.
+
+# Interpretación demográfica
+
+Los resultados evidencian dos procesos claramente diferenciados:
+
+### Primer proceso: mejora de la supervivencia (2010-2019)
+
+Las ganancias de esperanza de vida se originaron principalmente por reducciones de la mortalidad en edades adultas y de vejez, especialmente entre los 55 y 75 años.
+
+Esto refleja avances en:
+
+-    Atención médica.
+
+-    Control de enfermedades crónicas.
+
+-    Diagnóstico temprano.
+
+-    Mayor acceso a servicios de salud.
+
+### Segundo proceso: choque de mortalidad (2019-2021)
+
+La disminución observada entre 2019 y 2021 está fuertemente concentrada en edades medias y avanzadas, particularmente entre los 50 y 80 años.
+
+Este patrón es consistente con el impacto de la pandemia de COVID-19, ya que:
+
+-    Las pérdidas son mínimas en edades infantiles.
+
+-    Se concentran precisamente en los grupos etarios con mayor riesgo de mortalidad por la enfermedad.
+
+-    La magnitud de las contribuciones negativas supera ampliamente cualquier mejora observada en edades jóvenes.
+
+## En general
+
+> La descomposición de Arriaga muestra que el incremento de la esperanza de vida en Coahuila entre 2010 y 2019 estuvo impulsado principalmente por reducciones de la mortalidad en edades adultas y avanzadas, especialmente entre los 55 y 75 años. Tanto hombres como mujeres registraron contribuciones positivas en la mayoría de los grupos de edad, reflejando mejoras generalizadas en las condiciones de supervivencia. En contraste, entre 2019 y 2021 se observa una inversión del patrón, con contribuciones predominantemente negativas concentradas entre los 45 y 80 años. Las mayores pérdidas se registran en edades avanzadas, particularmente entre los 60 y 75 años, lo que sugiere que el deterioro de la esperanza de vida estuvo asociado principalmente al aumento de la mortalidad en esos grupos etarios. Este comportamiento es congruente con los efectos demográficos de la pandemia de COVID-19, cuyos impactos se concentraron en la población adulta y adulta mayor.
+
+# Análisis del Impacto de los Homicidios sobre la Esperanza de Vida en Coahuila
+
+Las figuras presentan tres perspectivas complementarias sobre el efecto de los homicidios en la mortalidad de la población de Coahuila entre 2010 y 2021:
+
+1.   Comparación de la esperanza de vida observada y la esperanza de vida sin homicidios.
+
+2.  Años de esperanza de vida que podrían recuperarse eliminando los homicidios.
+
+3.  Probabilidades de muerte asociadas a esta causa por edad y sexo.
+
+# 1. Esperanza de vida con y sin homicidios
+
+La primera gráfica compara la esperanza de vida observada ("todas las causas") con la esperanza de vida hipotética obtenida al eliminar las defunciones por homicidio.
+
+## Mujeres
+
+| Año  | Sin homicidios | Todas las causas | Diferencia |
+|------|----------------|------------------|------------|
+| 2010 | 66.7           | 66.4             | 0.3        |
+| 2019 | 68.3           | 68.0             | 0.3        |
+| 2021 | 64.5           | 64.2             | 0.3        |
+
+Las diferencias son muy pequeñas y prácticamente constantes en los tres años.
+
+Esto indica que los homicidios tienen un efecto relativamente limitado sobre la esperanza de vida femenina, debido a que la incidencia de esta causa de muerte es considerablemente menor entre las mujeres.
+
+## Hombres
+
+| Año  | Sin homicidios | Todas las causas | Diferencia |
+|------|----------------|------------------|------------|
+| 2010 | 59.9           | 58.9             | 1.0        |
+| 2019 | 61.2           | 60.3             | 0.9        |
+| 2021 | 57.9           | 56.9             | 1.0        |
+
+La situación masculina es muy diferente.
+
+La eliminación de los homicidios produciría ganancias cercanas a un año completo de esperanza de vida en todos los años analizados.
+
+Esto evidencia que los homicidios representan una causa importante de mortalidad prematura masculina.
+
+Además, el efecto es aproximadamente tres veces mayor que el observado en las mujeres.
+
+# 2. Años ganados al eliminar homicidios
+
+La segunda figura muestra directamente el incremento de esperanza de vida que se obtendría si los homicidios desaparecieran completamente.
+
+## Mujeres
+
+Los años recuperados son:
+
+-    2010: aproximadamente 0.26 años.
+
+-    2019: aproximadamente 0.29 años.
+
+-    2021: aproximadamente 0.32 años.
+
+Las ganancias son reducidas y permanecen relativamente estables a lo largo del periodo.
+
+Esto confirma que, aunque los homicidios afectan a la población femenina, su contribución al nivel general de mortalidad es limitada.
+
+## Hombres
+
+Las ganancias son considerablemente mayores:
+
+-    2010: aproximadamente 0.97 años.
+
+-    2019: aproximadamente 0.89 años.
+
+-    2021: aproximadamente 1.01 años.
+
+Eliminar los homicidios permitiría aumentar la esperanza de vida masculina en cerca de un año.
+
+Desde una perspectiva demográfica, una ganancia de un año completo de esperanza de vida es sustancial y evidencia el peso que tiene la violencia homicida sobre la mortalidad masculina.
+
+## Comparación por sexo
+
+Las ganancias masculinas son entre tres y cuatro veces superiores a las femeninas.
+
+Este resultado refleja que:
+
+-    Los hombres están mucho más expuestos a la violencia letal.
+
+-    La mayor parte de las víctimas de homicidio se concentra en población masculina.
+
+-    Los homicidios afectan principalmente edades jóvenes y adultas, donde las pérdidas potenciales de años de vida son mayores.
+
+# 3. Probabilidades de muerte por homicidio
+
+La tercera gráfica muestra la evolución de las probabilidades de morir por homicidio según edad y sexo.
+
+## Patrón general
+
+Las probabilidades de muerte por homicidio:
+
+-    Son muy bajas en la infancia.
+
+-    Aumentan rápidamente durante la adolescencia.
+
+-    Continúan creciendo durante la adultez.
+
+-    Alcanzan sus valores más elevados en edades avanzadas.
+
+Aunque los niveles absolutos son relativamente bajos, la tendencia ascendente indica una acumulación del riesgo conforme aumenta la edad.
+
+## Diferencias por sexo
+
+La curva masculina se mantiene sistemáticamente por encima de la femenina durante prácticamente todo el ciclo de vida.
+
+Esto significa que:
+
+-    Los hombres presentan una mayor exposición al riesgo de homicidio.
+
+-    La brecha se vuelve más visible desde la adolescencia y adultez temprana.
+
+-    La sobremortalidad masculina por causas violentas contribuye significativamente a la diferencia de esperanza de vida observada entre ambos sexos.
+
+## Implicaciones demográficas
+
+Los homicidios tienen un impacto particularmente importante porque ocurren con frecuencia en edades productivas.
+
+Cuando una muerte ocurre a edades jóvenes:
+
+-    Se pierden más años potenciales de vida.
+
+-    El efecto sobre la esperanza de vida es mayor.
+
+-    Se incrementan los costos sociales y económicos asociados a la mortalidad prematura.
+
+Por esta razón, incluso cuando los homicidios representan una fracción relativamente pequeña de las defunciones totales, su efecto sobre la esperanza de vida puede ser considerable, especialmente en los hombres.
+
+# Conclusiones
+
+Los resultados muestran que los homicidios constituyen una causa relevante de mortalidad prematura en Coahuila, particularmente entre la población masculina. Mientras que para las mujeres la eliminación de esta causa incrementaría la esperanza de vida en aproximadamente tres décimas de año, para los hombres el aumento sería cercano a un año completo. Esta diferencia refleja la mayor exposición masculina a la violencia letal y contribuye a explicar parte de la brecha de esperanza de vida entre ambos sexos. Asimismo, las probabilidades de muerte por homicidio aumentan con la edad y son sistemáticamente superiores en los hombres. En conjunto, la evidencia sugiere que la reducción de los homicidios tendría un efecto positivo sobre la longevidad de la población, especialmente entre los varones, donde se observan las mayores pérdidas de años potenciales de vida asociadas a esta causa de muerte.
+
+# Análisis de las Tasas Específicas de Fecundidad por Edad (TEFE) – Coahuila, México y Suiza, 2019
+
+Las gráficas presentan las tasas específicas de fecundidad por edad (TEFE) para Coahuila, México (nivel nacional) y Suiza durante 2019. Estas tasas representan el número de nacimientos ocurridos por cada 1,000 mujeres en cada grupo de edad y permiten identificar el calendario reproductivo de cada población.
+
+Asimismo, se muestra la **Tasa Global de Fecundidad (TGF)**, que resume el número promedio de hijos que tendría una mujer durante su vida reproductiva si estuviera expuesta a las tasas observadas.
+
+Los valores reportados son:
+
+-    **Coahuila:** TGF = 1.83 hijos por mujer.
+
+-    **México:** TGF = 1.70 hijos por mujer.
+
+-    **Suiza:** TGF = 1.39 hijos por mujer.
+
+# 1. Perfil de fecundidad de México
+
+México presenta un patrón de fecundidad relativamente temprano.
+
+Las mayores tasas se observan en:
+
+| Grupo de edad | TEFE  |
+|---------------|-------|
+| 15-19         | 52.3  |
+| 20-24         | 101.2 |
+| 25-29         | 89.7  |
+| 30-34         | 61.5  |
+| 35-39         | 28.8  |
+
+La fecundidad alcanza su máximo entre los **20 y 24 años**, con más de 100 nacimientos por cada 1,000 mujeres.
+
+Posteriormente las tasas disminuyen gradualmente conforme aumenta la edad.
+
+Este patrón refleja un calendario reproductivo relativamente joven, característico de poblaciones latinoamericanas donde una proporción importante de los nacimientos ocurre antes de los 30 años.
+
+Además, la tasa de fecundidad adolescente (15-19 años) sigue siendo considerablemente elevada.
+
+# 2. Perfil de fecundidad de Coahuila
+
+Coahuila presenta una estructura muy similar a la observada para el conjunto nacional.
+
+| Grupo de edad | TEFE  |
+|---------------|-------|
+| 15-19         | 47.6  |
+| 20-24         | 103.8 |
+| 25-29         | 97.4  |
+| 30-34         | 71.2  |
+| 35-39         | 35.8  |
+
+Las características más importantes son:
+
+### Menor fecundidad adolescente
+
+La tasa entre 15 y 19 años (47.6) es inferior a la nacional (52.3).
+
+Esto sugiere una menor incidencia relativa de maternidad temprana respecto al promedio del país.
+
+### Mayor concentración entre 20 y 34 años
+
+Los grupos:
+
+-    20-24 años.
+
+-    25-29 años.
+
+-    30-34 años.
+
+Presentan tasas superiores a las nacionales.
+
+Especialmente destaca el grupo 25-29 años:
+
+97.4>89.797.4 > 89.797.4\>89.7
+
+Lo anterior indica que una parte importante de los nacimientos se concentra en edades adultas jóvenes.
+
+### Mayor fecundidad total
+
+La TGF de Coahuila (1.83) supera a la nacional (1.70).
+
+Esto implica que, en promedio, las mujeres de Coahuila tienen más hijos que el promedio nacional.
+
+# 3. Perfil de fecundidad de Suiza
+
+Suiza muestra un patrón completamente diferente.
+
+| Grupo de edad | TEFE  |
+|---------------|-------|
+| 15-19         | 1.9   |
+| 20-24         | 26.0  |
+| 25-29         | 83.5  |
+| 30-34         | 102.8 |
+| 35-39         | 52.4  |
+
+Las diferencias son muy marcadas.
+
+### Fecundidad adolescente prácticamente inexistente
+
+La tasa de 1.9 nacimientos por mil mujeres entre 15 y 19 años es extremadamente baja.
+
+Comparada con Coahuila:
+
+47.6/1.9≈2547.6/1.9 \approx 2547.6/1.9≈25
+
+La fecundidad adolescente en Coahuila es aproximadamente veinticinco veces mayor.
+
+### Postergación de la maternidad
+
+El máximo de fecundidad ocurre entre los **30 y 34 años**, no entre los 20 y 24 como sucede en México.
+
+Esto refleja un proceso de retraso de la maternidad asociado a:
+
+-    Mayor escolaridad.
+
+-    Incorporación femenina al mercado laboral.
+
+-    Mayor uso de métodos anticonceptivos.
+
+-    Formación tardía de la unión.
+
+### Mayor importancia de edades avanzadas
+
+Suiza presenta tasas elevadas entre:
+
+-    30-34 años.
+
+-    35-39 años.
+
+Incluso la fecundidad después de los 35 años supera ampliamente la observada en México y Coahuila.
+
+# Comparación de los calendarios reproductivos
+
+## México y Coahuila
+
+Ambos presentan un patrón de fecundidad relativamente temprano:
+
+-    Pico entre 20 y 24 años.
+
+-    Niveles importantes de fecundidad adolescente.
+
+-    Descenso continuo después de los 30 años.
+
+Este patrón es típico de países que aún conservan elementos de fecundidad tradicional.
+
+## Suiza
+
+Presenta un calendario reproductivo tardío:
+
+-    Muy baja fecundidad adolescente.
+
+-    Pico entre 30 y 34 años.
+
+-    Mayor peso de la fecundidad después de los 35 años.
+
+Este comportamiento es característico de países con una transición demográfica avanzada.
+
+# Análisis de la Tasa Global de Fecundidad (TGF)
+
+| Región   | TGF  |
+|----------|------|
+| Coahuila | 1.83 |
+| México   | 1.70 |
+| Suiza    | 1.39 |
+
+Las tres poblaciones presentan niveles de fecundidad por debajo del nivel de reemplazo generacional, que corresponde aproximadamente a:
+
+TGF≈2.1TGF \approx 2.1TGF≈2.1
+
+Por lo tanto:
+
+-    Ninguna de las tres poblaciones está generando suficientes nacimientos para reemplazar completamente a la generación de madres.
+
+-    El fenómeno es más intenso en Suiza.
+
+-    Coahuila presenta la fecundidad más alta de los tres casos, aunque también se encuentra por debajo del nivel de reemplazo.
+
+# Interpretación demográfica
+
+Los resultados muestran que Coahuila ocupa una posición intermedia entre los patrones latinoamericanos y los observados en países desarrollados.
+
+Por un lado:
+
+-    Mantiene niveles relativamente altos de fecundidad en edades jóvenes.
+
+-    Conserva una fecundidad adolescente considerable.
+
+Por otro:
+
+-    La fecundidad se concentra cada vez más entre los 25 y 34 años.
+
+-    El nivel global de fecundidad se encuentra por debajo del reemplazo generacional.
+
+Esto sugiere una transición hacia patrones reproductivos de menor intensidad, aunque todavía alejados del modelo de postergación extrema observado en Suiza.
+
+## Finalmente
+
+> Las tasas específicas de fecundidad por edad muestran diferencias importantes entre Coahuila, México y Suiza. Mientras que México y Coahuila presentan un calendario reproductivo relativamente temprano, con máximos niveles de fecundidad entre los 20 y 29 años, Suiza concentra sus nacimientos principalmente entre los 30 y 34 años, reflejando una postergación de la maternidad característica de países con transición demográfica avanzada. Coahuila registra una Tasa Global de Fecundidad de 1.83 hijos por mujer, superior a la observada a nivel nacional (1.70) y en Suiza (1.39), aunque en todos los casos se mantiene por debajo del nivel de reemplazo generacional. Asimismo, la fecundidad adolescente es considerablemente más elevada en Coahuila y México que en Suiza, evidenciando diferencias sustanciales en los patrones reproductivos y en el calendario de formación familiar entre estas poblaciones.
 
 ## Bibliografía
 
