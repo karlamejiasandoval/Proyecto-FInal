@@ -6,7 +6,7 @@
 library(data.table)
 
 # Carga de las funciones del profesor ----
-source("Funciones.R") 
+source("Script/Funciones.R") 
 
 # Carga de tasas centrales de mortalidad ----
 mortalidad <- fread("Data/tasas_mortalidad.csv")

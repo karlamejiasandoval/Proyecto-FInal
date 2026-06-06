@@ -156,4 +156,3 @@ tabla_causa_eliminada <- function(lt_todas_causas, prop_causa, causa_nombre = "c
   
   return(lt_sin_causa)
 }
-

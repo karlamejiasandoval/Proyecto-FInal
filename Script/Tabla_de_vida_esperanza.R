@@ -25,6 +25,13 @@ def <- fread("Data/def_pro.csv")
 apv$sex <- tolower(apv$sex)
 def$sex <- tolower(def$sex)
 
+# Convertir a M y F
+apv$sex[apv$sex == "male"] <- "M"
+apv$sex[apv$sex == "female"] <- "F"
+
+def$sex[def$sex == "male"] <- "M"
+def$sex[def$sex == "female"] <- "F"
+
 # ------------------------------------------------------------------------------
 # 4. UNIR BASES ----
 # ------------------------------------------------------------------------------
@@ -174,36 +181,28 @@ write.csv(
 
 # ------------------------------------------------------------------------------
 # 14. ESPERANZA DE VIDA A LOS 5 AÑOS
-# (tu base inicia en edad 5)
 # ------------------------------------------------------------------------------
 
-ev <- tv %>%
-  filter(age == 5) %>%
-  select(year, sex, ex)
+ev <- tv[age == 5, .(year, sex, ex)]
 
 print(ev)
 
 # ------------------------------------------------------------------------------
-# 15. TABLA RESUMEN ----
+# 15. TABLA RESUMEN
 # ------------------------------------------------------------------------------
 
-cuadro <- ev %>%
-  mutate(
-    sex = recode(
-      sex,
-      "male" = "Hombres",
-      "female" = "Mujeres"
-    )
-  ) %>%
-  pivot_wider(
-    names_from = sex,
-    values_from = ex
-  )
+cuadro <- dcast(
+  ev,
+  year ~ sex,
+  value.var = "ex"
+)
+
+setorder(cuadro, year)
 
 print(cuadro)
 
 # ------------------------------------------------------------------------------
-# 16. GUARDAR ESPERANZA DE VIDA ----
+# 16. GUARDAR ESPERANZA DE VIDA
 # ------------------------------------------------------------------------------
 
 write.csv(
@@ -213,108 +212,18 @@ write.csv(
 )
 
 # ------------------------------------------------------------------------------
-# 17. MOSTRAR RESULTADOS ----
+# 17. TABLA DE VIDA COMPLETA PARA QUARTO
 # ------------------------------------------------------------------------------
 
-cat("\n")
+library(knitr)
 
-cat("====================================================\n")
-
-cat(" TABLAS DE VIDA GENERADAS CORRECTAMENTE\n")
-
-cat("====================================================\n")
-
-cat("Archivo principal:\n")
-cat("Data/tablas_vida.csv\n\n")
-
-cat("Esperanza de vida:\n")
-cat("Data/esperanza_vida_coahuila.csv\n")
-
-cat("====================================================\n")
-
-# ==============================================================================
-# MOSTRAR TABLA DE VIDA 
-# ==============================================================================
-
-# ------------------------------------------------------------------------------
-# 18. VER TABLA COMPLETA
-# ------------------------------------------------------------------------------
-
-View(tv)
-
-# ------------------------------------------------------------------------------
-# 19. TABLA COMPLETA 
-# ------------------------------------------------------------------------------
-
-datatable(
+knitr::kable(
   tv,
-  extensions = "Buttons",
-  options = list(
-    pageLength = 20,
-    scrollX = TRUE,
-    dom = "Bfrtip",
-    buttons = c("copy", "csv", "excel"),
-    autoWidth = TRUE
-  ),
-  rownames = FALSE,
   caption = "Tabla de Vida Completa - Coahuila"
 )
 
 # ------------------------------------------------------------------------------
-# 20. ESPERANZA DE VIDA PARA TODOS LOS AÑOS
+# 18. MOSTRAR ESPERANZA DE VIDA
 # ------------------------------------------------------------------------------
-
-ev <- tv %>%
-  filter(age == 5) %>%
-  select(year, sex, ex)
-
-# ------------------------------------------------------------------------------
-# 21. TABLA RESUMEN 
-# ------------------------------------------------------------------------------
-
-cuadro <- ev %>%
-  mutate(
-    sex = recode(
-      sex,
-      "male" = "Hombres",
-      "female" = "Mujeres"
-    )
-  ) %>%
-  pivot_wider(
-    names_from = sex,
-    values_from = ex
-  ) %>%
-  arrange(year)
-
-# ------------------------------------------------------------------------------
-# 22. MOSTRAR TABLA 
-# ------------------------------------------------------------------------------
-
-datatable(
-  cuadro,
-  extensions = "Buttons",
-  options = list(
-    dom = "Bfrtip",
-    buttons = c("copy", "csv", "excel"),
-    pageLength = 10,
-    autoWidth = TRUE
-  ),
-  rownames = FALSE,
-  caption = "Esperanza de Vida a los 5 años - Coahuila"
-)
-
-# ------------------------------------------------------------------------------
-# 23. IMPRIMIR EN CONSOLA
-# ------------------------------------------------------------------------------
-
-cat("\n")
-
-cat("====================================================\n")
-
-cat(" ESPERANZA DE VIDA POR SEXO Y AÑO\n")
-
-cat("====================================================\n")
 
 print(cuadro)
-
-cat("====================================================\n")

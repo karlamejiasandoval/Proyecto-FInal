@@ -38,4 +38,3 @@ ggplot(pop_coah, aes(x = EDAD, y = POBLACION, fill = SEXO)) +
        y = "Población") +
   theme_minimal() +
   scale_fill_manual(values = c("Hombres" = "steelblue", "Mujeres" = "pink"))
-

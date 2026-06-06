@@ -208,4 +208,3 @@ def_gr <- def_pro[ , .(deaths=sum(deaths)), .(year, sex)]
 
 ## Guardar tabla de defunciones prorrateadas ----
 write.csv(def_pro, "Data/def_pro.csv", row.names = FALSE)
-

@@ -122,17 +122,17 @@ p_curvas <- ggplot(df,
     )
   ) +
   
-  theme_minimal(base_size = 13) +
+  theme_minimal(base_size = 7) +
   theme(
-    plot.title         = element_text(face = "bold", size = 15, hjust = 0.5),
-    plot.subtitle      = element_text(size = 11.5, hjust = 0.5,
+    plot.title         = element_text(face = "bold", size = 11, hjust = 0.5),
+    plot.subtitle      = element_text(size = 7.5, hjust = 0.5,
                                       color = "gray30"),
-    plot.caption       = element_text(size = 7.8, hjust = 0,
+    plot.caption       = element_text(size = 4.8, hjust = 0,
                                       color = "gray50", lineheight = 1.3),
     axis.title         = element_text(face = "bold"),
-    axis.text          = element_text(size = 11),
+    axis.text          = element_text(size = 7),
     legend.position    = "bottom",
-    legend.text        = element_text(size = 10),
+    legend.text        = element_text(size = 6),
     legend.key.width   = unit(2.2, "cm"),
     panel.grid.minor   = element_blank(),
     panel.grid.major.x = element_blank(),
@@ -172,17 +172,17 @@ p_barras <- ggplot(df,
     )
   ) +
   
-  theme_minimal(base_size = 13) +
+  theme_minimal(base_size = 7) +
   theme(
-    plot.title         = element_text(face = "bold", size = 14, hjust = 0.5),
-    plot.subtitle      = element_text(size = 11, hjust = 0.5,
+    plot.title         = element_text(face = "bold", size = 10, hjust = 0.5),
+    plot.subtitle      = element_text(size = 7, hjust = 0.5,
                                       color = "gray30"),
-    plot.caption       = element_text(size = 8, hjust = 0,
+    plot.caption       = element_text(size = 4, hjust = 0,
                                       color = "gray50"),
     axis.title         = element_text(face = "bold"),
-    axis.text          = element_text(size = 11),
+    axis.text          = element_text(size = 7),
     legend.position    = "bottom",
-    legend.text        = element_text(size = 10),
+    legend.text        = element_text(size = 6),
     panel.grid.minor   = element_blank(),
     panel.grid.major.x = element_blank(),
     plot.margin        = margin(15, 20, 10, 15)

@@ -30,9 +30,21 @@ format:
     classoption: titlepage
     toc: true
     number-sections: true
-
+    geometry: margin=2cm
+    fontsize: 9pt
+    
 editor: visual
 ---
+
+```{r}
+#| include: false
+
+knitr::opts_chunk$set(
+  fig.align = "center",
+  fig.width = 4.5,
+  fig.height = 3.5
+)
+```
 
 ## Introducción
 
@@ -48,7 +60,7 @@ En cuanto a la migración internacional, la ubicación fronteriza de Coahuila le
 
 En conjunto, Coahuila puede entenderse como una entidad de gran importancia económica, demográfica y migratoria dentro del norte de México. Su desarrollo industrial, su perfil urbano, su cercanía con Estados Unidos y su capacidad para atraer población hacen de este estado un espacio clave para analizar los cambios sociales, laborales y territoriales que caracterizan a la región fronteriza mexicana.
 
-## Piramide de población de Coahuila 2026
+### Pirámide de población de Coahuila 2026
 
 ```{r}
 # 1. Instalar y cargar paquetes
@@ -90,7 +102,7 @@ ggplot(pop_coah, aes(x = EDAD, y = POBLACION, fill = SEXO)) +
   scale_fill_manual(values = c("Hombres" = "steelblue", "Mujeres" = "pink"))
 ```
 
-## Analisis de la piramide de distribución poblacional de Coahulila en 2026.
+### Análisis de la pirámide de distribución poblacional de Coahuila en 2026
 
 La pirámide poblacional de Coahuila muestra una base más estrecha en comparación con los grupos de edad adulta, lo que indica que nacen menos niños que en décadas anteriores. Al mismo tiempo, se observa un mayor número de personas en edades adultas y avanzadas, lo que refleja que la población está envejeciendo.
 
@@ -102,9 +114,9 @@ En general, la gráfica muestra que el estado de Coahuila enfrenta un proceso de
 
 ## **Diagrama de flujo**
 
-![](PDF/Diagrama%20Proyecto.png)
+![](Diagrama%20Proyecto.png)
 
-## **Formulas Utilizadas**
+## **Fórmulas Utilizadas**
 
 *Tasa Específica de Mortalidad*
 
@@ -198,7 +210,13 @@ $$
 e_x = \frac{T_x}{l_x}
 $$
 
+## **Código para los cálculos**
+
 ## Cálculo de Años Persona Vividos (APV) y Pirámides Poblacionales
+
+*Cálculo de APV*:
+
+Se calcula la población a mitad de año (APV) para 2010, 2019 y 2021 usando interpolación exponencial entre los censos de 2010 y 2020.
 
 ```{r, warning=FALSE, message=FALSE}
 # ==============================================================================
@@ -233,7 +251,7 @@ expo <- function(pop_0, pop_T, t_0, t_T, t) {
 
 # Carga de tabla de datos ----
 # (Asegúrate de haber corrido antes tu script de limpieza con los datos de Coahuila)
-censos_pro <- fread("Data/censos_pro.csv")
+censos_pro <- fread("../Data/censos_pro.csv")
 
 
 # ==============================================================================
@@ -269,7 +287,7 @@ apv2021[, `:=`(N = N_2021, year = 2021)]
 
 # --- Consolidar y guardar tablas históricas de APV ---
 apv <- rbind(apv2010, apv2019, apv2021)
-write.csv(apv, "Data/apv.csv", row.names = FALSE)
+write.csv(apv, "../Data/apv.csv", row.names = FALSE)
 
 
 # ==============================================================================
@@ -399,6 +417,355 @@ ggsave("images/apv/apv_2021.png", width = 10, height = 6, dpi = 300)
 
 ```
 
+## Tablas de vida - Coahuila 
+
+*Tablas de vida*:
+
+Se unen las defunciones con los $APV$ y se calcula la tasa de mortalidad $mx$
+
+```{r, warning=FALSE, message=FALSE}
+# ==============================================================================
+# TABLAS DE VIDA - COAHUILA
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. PAQUETES ----
+# ------------------------------------------------------------------------------
+
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(DT)
+
+# ------------------------------------------------------------------------------
+# 2. CARGAR DATOS ----
+# ------------------------------------------------------------------------------
+
+apv <- fread("../Data/apv.csv")
+def <- fread("../Data/def_pro.csv")
+
+# ------------------------------------------------------------------------------
+# 3. HOMOLOGAR SEXOS ----
+# ------------------------------------------------------------------------------
+
+apv$sex <- tolower(apv$sex)
+def$sex <- tolower(def$sex)
+
+# Convertir a M y F
+apv$sex[apv$sex == "male"] <- "M"
+apv$sex[apv$sex == "female"] <- "F"
+
+def$sex[def$sex == "male"] <- "M"
+def$sex[def$sex == "female"] <- "F"
+
+# ------------------------------------------------------------------------------
+# 4. UNIR BASES ----
+# ------------------------------------------------------------------------------
+
+tv <- merge(
+  apv,
+  def,
+  by = c("year", "age", "sex"),
+  all.x = TRUE
+)
+
+# ------------------------------------------------------------------------------
+# 5. LIMPIEZA ----
+# ------------------------------------------------------------------------------
+
+tv$deaths[is.na(tv$deaths)] <- 0
+
+tv <- tv[N > 0]
+
+# ------------------------------------------------------------------------------
+# 6. CALCULAR mx ----
+# ------------------------------------------------------------------------------
+
+tv[, mx := deaths / N]
+tv[is.na(mx), mx := 0]
+tv[is.infinite(mx), mx := 0]
+
+# ------------------------------------------------------------------------------
+# 7. DEFINIR ax ----
+# ------------------------------------------------------------------------------
+
+tv[, ax := 0.5]
+
+# ------------------------------------------------------------------------------
+# 8. CALCULAR qx ----
+# ------------------------------------------------------------------------------
+
+tv[, qx := mx / (1 + (1 - ax) * mx)]
+tv[qx > 1, qx := 1]
+
+# Último grupo abierto
+tv[age == max(age), qx := 1]
+
+# ------------------------------------------------------------------------------
+# 9. ORDENAR ----
+# ------------------------------------------------------------------------------
+
+setorder(tv, year, sex, age)
+
+# ------------------------------------------------------------------------------
+# 10. CREAR VARIABLES ----
+# ------------------------------------------------------------------------------
+
+tv[, lx := NA_real_]
+tv[, dx := NA_real_]
+tv[, Lx := NA_real_]
+tv[, Tx := NA_real_]
+tv[, ex := NA_real_]
+
+# ------------------------------------------------------------------------------
+# 11. CONSTRUIR TABLAS DE VIDA ----
+# ------------------------------------------------------------------------------
+
+years <- unique(tv$year)
+sexes <- unique(tv$sex)
+
+for(y in years){
+  
+  for(s in sexes){
+    
+    temp <- copy(tv[year == y & sex == s])
+    
+    if(nrow(temp) == 0) next
+    
+    # --------------------------------------------------------------------------
+    # lx
+    # --------------------------------------------------------------------------
+    
+    temp$lx[1] <- 100000
+    
+    for(i in 2:nrow(temp)){
+      
+      temp$lx[i] <- temp$lx[i-1] * (1 - temp$qx[i-1])
+    }
+    
+    # --------------------------------------------------------------------------
+    # dx
+    # --------------------------------------------------------------------------
+    
+    temp$dx <- temp$lx * temp$qx
+    
+    # --------------------------------------------------------------------------
+    # Lx
+    # --------------------------------------------------------------------------
+    
+    for(i in 1:(nrow(temp)-1)){
+      
+      temp$Lx[i] <- temp$lx[i+1] + temp$ax[i] * temp$dx[i]
+    }
+    
+    # Último grupo abierto
+    ultimo <- nrow(temp)
+    
+    temp$Lx[ultimo] <- temp$lx[ultimo] / temp$mx[ultimo]
+    
+    # --------------------------------------------------------------------------
+    # Tx
+    # --------------------------------------------------------------------------
+    
+    temp$Tx <- rev(cumsum(rev(temp$Lx)))
+    
+    # --------------------------------------------------------------------------
+    # ex
+    # --------------------------------------------------------------------------
+    
+    temp$ex <- temp$Tx / temp$lx
+    
+    # --------------------------------------------------------------------------
+    # GUARDAR
+    # --------------------------------------------------------------------------
+    
+    tv[year == y & sex == s] <- temp
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 12. REDONDEAR RESULTADOS ----
+# ------------------------------------------------------------------------------
+
+tv[, mx := round(mx, 6)]
+tv[, qx := round(qx, 6)]
+tv[, lx := round(lx, 0)]
+tv[, dx := round(dx, 0)]
+tv[, Lx := round(Lx, 0)]
+tv[, Tx := round(Tx, 0)]
+tv[, ex := round(ex, 2)]
+
+# ------------------------------------------------------------------------------
+# 13. GUARDAR TABLAS DE VIDA ----
+# ------------------------------------------------------------------------------
+
+write.csv(
+  tv,
+  "../Data/tablas_vida.csv",
+  row.names = FALSE
+)
+
+# ------------------------------------------------------------------------------
+# 14. ESPERANZA DE VIDA A LOS 5 AÑOS
+# ------------------------------------------------------------------------------
+
+ev <- tv[age == 5, .(year, sex, ex)]
+
+print(ev)
+
+# ------------------------------------------------------------------------------
+# 15. TABLA RESUMEN
+# ------------------------------------------------------------------------------
+
+cuadro <- dcast(
+  ev,
+  year ~ sex,
+  value.var = "ex"
+)
+
+setorder(cuadro, year)
+
+print(cuadro)
+
+# ------------------------------------------------------------------------------
+# 16. GUARDAR ESPERANZA DE VIDA
+# ------------------------------------------------------------------------------
+
+write.csv(
+  cuadro,
+  "../Data/esperanza_vida_coahuila.csv",
+  row.names = FALSE
+)
+
+
+# ------------------------------------------------------------------------------
+# 17. TABLA DE VIDA COMPLETA 
+# ------------------------------------------------------------------------------
+
+library(knitr)
+
+knitr::kable(
+  tv,
+  caption = "Tabla de Vida Completa - Coahuila"
+)
+
+# ------------------------------------------------------------------------------
+# 18. MOSTRAR ESPERANZA DE VIDA
+# ------------------------------------------------------------------------------
+
+print(cuadro)
+
+```
+
+## Gráficas de funciones de la tabla de mortalidad
+
+```{r}
+# ==============================================================================
+# Script 8: Gráficas de Funciones de la Tabla de Mortalidad (lx y ex) - Coahuila
+# ==============================================================================
+
+# 1. Limpieza de memoria y gráficas ----
+graphics.off()
+rm(list = ls())
+
+# 2. Carga de paquetes ----
+library(data.table)
+library(ggplot2)
+
+# 3. Carga de las tablas de vida calculadas de Coahuila ----
+tablas_vida <- fread("../Data/tablas_vida_completas.csv")
+
+# ==============================================================================
+# 4. PREPROCESAMIENTO Y PARCHE DE EDADES ----
+# ==============================================================================
+
+# Si la columna de edad se llama 'x', la homologamos a 'age'
+if ("x" %in% names(tablas_vida)) setnames(tablas_vida, "x", "age")
+
+# Convertimos la edad a formato numérico puro (ej. "1-4" se vuelve 1, "85+" se vuelve 85)
+tablas_vida[, age := as.numeric(gsub("-.*|\\+", "", as.character(age)))]
+
+# Ordenamos perfectamente la base por año, sexo y edad
+setorder(tablas_vida, year, sex, age)
+
+# Aseguramos que exista la carpeta para guardar los nuevos gráficos
+if(!dir.exists("images/funciones_vida")) dir.create("images/funciones_vida", recursive = TRUE)
+
+
+# ==============================================================================
+# 5. GRÁFICA 1: CURVA DE SUPERVIVENCIA (lx) ----
+# ==============================================================================
+
+ggplot(tablas_vida, aes(x = age, y = lx, color = sex)) +
+  geom_line(linewidth = 1.2, alpha = 0.9) +
+  facet_wrap(~year) +
+  scale_color_manual(
+    values = c("male" = "#2c7fb8", "female" = "#fa9fb5"),
+    labels = c("male" = "Hombres", "female" = "Mujeres"),
+    name = "Sexo"
+  ) +
+  scale_x_continuous(breaks = seq(0, 85, by = 10)) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Curva de Supervivencia (lx) - Coahuila",
+    subtitle = "Número de sobrevivientes a edad exacta x de una cohorte teórica de 100,000 nacidos vivos",
+    x = "Edad exacta (x)",
+    y = "Sobrevivientes (lx)",
+    caption = "Fuente: Elaboración propia con funciones actuariales basadas en datos de INEGI"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+    plot.subtitle = element_text(size = 10, color = "gray30", hjust = 0.5),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    strip.background = element_rect(fill = "gray95", color = "gray85"),
+    strip.text = element_text(face = "bold")
+  )
+
+ggsave("images/funciones_vida/curva_supervivencia_lx.png", width = 10, height = 6, dpi = 300)
+
+
+# ==============================================================================
+# 6. GRÁFICA 2: CURVA DE ESPERANZA DE VIDA COMPLETA (ex) ----
+# ==============================================================================
+
+ggplot(tablas_vida, aes(x = age, y = ex, color = sex)) +
+  geom_line(linewidth = 1.2, alpha = 0.9) +
+  facet_wrap(~year) +
+  scale_color_manual(
+    values = c("male" = "#2c7fb8", "female" = "#fa9fb5"),
+    labels = c("male" = "Hombres", "female" = "Mujeres"),
+    name = "Sexo"
+  ) +
+  scale_x_continuous(breaks = seq(0, 85, by = 10)) +
+  labs(
+    title = "Curva de Esperanza de Vida Remanente (ex) - Coahuila",
+    subtitle = "Años promedio de vida que le restan por vivir a una persona a la edad exacta x",
+    x = "Edad exacta (x)",
+    y = "Esperanza de vida remanente (ex)",
+    caption = "Fuente: Elaboración propia con funciones actuariales basadas en datos de INEGI"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+    plot.subtitle = element_text(size = 10, color = "gray30", hjust = 0.5),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    strip.background = element_rect(fill = "gray95", color = "gray85"),
+    strip.text = element_text(face = "bold")
+  )
+
+ggsave("images/funciones_vida/curva_esperanza_ex.png", width = 10, height = 6, dpi = 300)
+
+print("¡Gráficas de lx y ex generadas con éxito y guardadas en images/funciones_vida/!")
+```
+
+```{r}
+knitr::include_graphics("images/funciones_vida/curva_supervivencia_lx.png") 
+knitr::include_graphics("images/funciones_vida/curva_esperanza_ex.png") 
+```
+
 ## Construcción de Tablas de Vida y Esperanza de Vida
 
 ```{r}
@@ -410,10 +777,10 @@ ggsave("images/apv/apv_2021.png", width = 10, height = 6, dpi = 300)
 library(data.table)
 
 # Carga de las funciones del profesor ----
-source("Funciones.R") 
+source("../Script/Funciones.R") 
 
 # Carga de tasas centrales de mortalidad ----
-mortalidad <- fread("Data/tasas_mortalidad.csv")
+mortalidad <- fread("../Data/tasas_mortalidad.csv")
 
 # ==============================================================================
 # 1. GENERACIÓN DE TABLAS DE VIDA ----
@@ -428,7 +795,7 @@ tablas_vida <- mortalidad[, {
 }, by = .(year, sex)]
 
 # Guardar todas las tablas de vida consolidadas ----
-write.csv(tablas_vida, "Data/tablas_vida_completas.csv", row.names = FALSE)
+write.csv(tablas_vida, "../Data/tablas_vida_completas.csv", row.names = FALSE)
 
 
 # ==============================================================================
@@ -460,6 +827,8 @@ esperanza_nacimiento |>
 
 ## Descomposición de Arriaga
 
+Esta técnica nos permite desglosar por qué cambió la esperanza de vida en Coahuila entre dos momentos
+
 ```{r, warning=FALSE, message=FALSE}
 # ==============================================================================
 # Script 6: Descomposición de Arriaga para la Esperanza de Vida - Coahuila
@@ -479,10 +848,10 @@ library(lubridate)
 library(dplyr)
 
 # 3. Carga de funciones del profesor ----
-source("Funciones.R") 
+source("../Script/Funciones.R") 
 
 # 4. Carga de tablas de vida de Coahuila ----
-lt_output <- fread("Data/tablas_vida_completas.csv") 
+lt_output <- fread("../Data/tablas_vida_completas.csv") 
 
 # ==============================================================================
 # 5. APLICAR DESCOMPOSICIÓN DE ARRIAGA CON INYECCIÓN DE EDAD ----
@@ -604,6 +973,8 @@ knitr::include_graphics("images/ev/cambios_de_ev.png")
 
 ## Causa Eliminada (Homicidios)
 
+Eliminamos los homicidios de las causas de muerte para ver como se ven afectados los números
+
 ```{r}
 # ==============================================================================
 # Script 7: Análisis de Causa Eliminada (Homicidios) - Coahuila (CORREGIDO)
@@ -623,13 +994,13 @@ library(dplyr)
 library(openxlsx)
 
 # 3. Carga de funciones del profesor ----
-source("Funciones.R") 
+source("../Script/Funciones.R") 
 
 # 4. Carga de datos ----
-def_homicidios <- fread("Data/def_pro_hom.csv") 
-def_totales    <- fread("Data/def.csv") # <-- Cambiado a def.csv para consistencia exacta con lt_output
-apv            <- fread("Data/apv.csv")
-lt_output      <- fread("Data/tablas_vida_completas.csv") 
+def_homicidios <- fread("../Data/def_pro_hom.csv") 
+def_totales    <- fread("../Data/def.csv") # <-- Cambiado a def.csv para consistencia exacta con lt_output
+apv            <- fread("../Data/apv.csv")
+lt_output      <- fread("../Data/tablas_vida_completas.csv") 
 
 # ==============================================================================
 # 5. VERIFICAR Y HOMOLOGAR ESTRUCTURA DE DATOS ----
@@ -811,128 +1182,17 @@ fwrite(lt_comparacion, "output/comparacion_causa_eliminada.csv")
 fwrite(e0_dif, "output/resumen_e0_homicidios.csv")
 
 # ==============================================================================
-# 12. RESUMEN EJECUTIVO EN CONSOLA ----
+# 12. RESUMEN EJECUTIVO ----
 # ==============================================================================
-cat("\n", strrep("=", 60), "\n", sep = "")
-cat("RESUMEN EJECUTIVO - CAUSA ELIMINADA (HOMICIDIOS)\n")
-cat(strrep("=", 60), "\n\n", sep = "")
-cat("Entidad: Coahuila\n\n")
+
 print(e0_dif[, .(Año = year, Sexo = ifelse(sex == "male", "Hombres", "Mujeres"), E0_Todas = round(ex_todas, 2), E0_SinHom = round(ex_sin, 2), Ganancia_Años = round(dif_homicidios, 3))])
-cat(strrep("=", 60), "\n")
+
 ```
 
 ```{r}
 knitr::include_graphics("images/homicidios/e0_con_sin_homicidios.png")
 knitr::include_graphics("images/homicidios/perdida_e0_homicidios.png")
 knitr::include_graphics("images/homicidios/qx_con_sin_homicidios_2021.png")
-```
-
-```{r}
-# ==============================================================================
-# Script 8: Gráficas de Funciones de la Tabla de Mortalidad (lx y ex) - Coahuila
-# ==============================================================================
-
-# 1. Limpieza de memoria y gráficas ----
-graphics.off()
-rm(list = ls())
-
-# 2. Carga de paquetes ----
-library(data.table)
-library(ggplot2)
-
-# 3. Carga de las tablas de vida calculadas de Coahuila ----
-tablas_vida <- fread("Data/tablas_vida_completas.csv")
-
-# ==============================================================================
-# 4. PREPROCESAMIENTO Y PARCHE DE EDADES ----
-# ==============================================================================
-
-# Si la columna de edad se llama 'x', la homologamos a 'age'
-if ("x" %in% names(tablas_vida)) setnames(tablas_vida, "x", "age")
-
-# Convertimos la edad a formato numérico puro (ej. "1-4" se vuelve 1, "85+" se vuelve 85)
-tablas_vida[, age := as.numeric(gsub("-.*|\\+", "", as.character(age)))]
-
-# Ordenamos perfectamente la base por año, sexo y edad
-setorder(tablas_vida, year, sex, age)
-
-# Aseguramos que exista la carpeta para guardar los nuevos gráficos
-if(!dir.exists("images/funciones_vida")) dir.create("images/funciones_vida", recursive = TRUE)
-
-
-# ==============================================================================
-# 5. GRÁFICA 1: CURVA DE SUPERVIVENCIA (lx) ----
-# ==============================================================================
-
-ggplot(tablas_vida, aes(x = age, y = lx, color = sex)) +
-  geom_line(linewidth = 1.2, alpha = 0.9) +
-  facet_wrap(~year) +
-  scale_color_manual(
-    values = c("male" = "#2c7fb8", "female" = "#fa9fb5"),
-    labels = c("male" = "Hombres", "female" = "Mujeres"),
-    name = "Sexo"
-  ) +
-  scale_x_continuous(breaks = seq(0, 85, by = 10)) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(
-    title = "Curva de Supervivencia (lx) - Coahuila",
-    subtitle = "Número de sobrevivientes a edad exacta x de una cohorte teórica de 100,000 nacidos vivos",
-    x = "Edad exacta (x)",
-    y = "Sobrevivientes (lx)",
-    caption = "Fuente: Elaboración propia con funciones actuariales basadas en datos de INEGI"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
-    plot.subtitle = element_text(size = 10, color = "gray30", hjust = 0.5),
-    legend.position = "bottom",
-    panel.grid.minor = element_blank(),
-    strip.background = element_rect(fill = "gray95", color = "gray85"),
-    strip.text = element_text(face = "bold")
-  )
-
-ggsave("images/funciones_vida/curva_supervivencia_lx.png", width = 10, height = 6, dpi = 300)
-
-
-# ==============================================================================
-# 6. GRÁFICA 2: CURVA DE ESPERANZA DE VIDA COMPLETA (ex) ----
-# ==============================================================================
-
-ggplot(tablas_vida, aes(x = age, y = ex, color = sex)) +
-  geom_line(linewidth = 1.2, alpha = 0.9) +
-  facet_wrap(~year) +
-  scale_color_manual(
-    values = c("male" = "#2c7fb8", "female" = "#fa9fb5"),
-    labels = c("male" = "Hombres", "female" = "Mujeres"),
-    name = "Sexo"
-  ) +
-  scale_x_continuous(breaks = seq(0, 85, by = 10)) +
-  labs(
-    title = "Curva de Esperanza de Vida Remanente (ex) - Coahuila",
-    subtitle = "Años promedio de vida que le restan por vivir a una persona a la edad exacta x",
-    x = "Edad exacta (x)",
-    y = "Esperanza de vida remanente (ex)",
-    caption = "Fuente: Elaboración propia con funciones actuariales basadas en datos de INEGI"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
-    plot.subtitle = element_text(size = 10, color = "gray30", hjust = 0.5),
-    legend.position = "bottom",
-    panel.grid.minor = element_blank(),
-    strip.background = element_rect(fill = "gray95", color = "gray85"),
-    strip.text = element_text(face = "bold")
-  )
-
-ggsave("images/funciones_vida/curva_esperanza_ex.png", width = 10, height = 6, dpi = 300)
-
-print("¡Gráficas de lx y ex generadas con éxito y guardadas en images/funciones_vida/!")
-```
-
-```{r}
-knitr::include_graphics("images/funciones_vida/curva_supervivencia_lx.png")
-knitr::include_graphics("images/funciones_vida/curva_esperanza_ex.png")
-
 ```
 
 ## Demostración de la fecundidad de reemplazo
@@ -1167,6 +1427,222 @@ $$
 hijos por mujer.
 
 **Interpretación.** La fecundidad de reemplazo es ligeramente superior a dos hijos por mujer porque no todos los nacimientos son femeninos y porque una pequeña proporción de niñas fallece antes de llegar a las edades reproductivas.
+
+## Tasas Específicas de Fecundidad por Edad (TEFE) — 2019 Coahuila, México (nacional) y Suiza
+
+```{r, warning=FALSE, message=FALSE}
+# =============================================================================
+# Tasas Específicas de Fecundidad por Edad (TEFE) — 2019
+# Coahuila, México (nacional) y Suiza
+# =============================================================================
+# Fuentes:
+#   - Coahuila:  CONAPO, Proyecciones de Población de México y de las Entidades
+#                Federativas 2016-2050. TEFE quinquenales (nac./1,000 mujeres).
+#   - México:    INEGI, Censo de Población y Vivienda 2020 (año de referencia
+#                2019). Publicado en: Estrada-Ávalos et al., RDE-INEGI, 2022.
+#                TEFE quinquenales (nac./1,000 mujeres).
+#   - Suiza:     Federal Statistical Office (FSO/BFS) – BEVNAT /
+#                Human Fertility Database, 2019 (nac./1,000 mujeres).
+# =============================================================================
+
+# ── 0. Paquetes ───────────────────────────────────────────────────────────────
+pkgs <- c("ggplot2", "dplyr", "tidyr", "scales", "ggrepel")
+for (p in pkgs) {
+  if (!requireNamespace(p, quietly = TRUE)) install.packages(p, quiet = TRUE)
+  library(p, character.only = TRUE)
+}
+
+# ── 1. Datos ──────────────────────────────────────────────────────────────────
+
+grupos_edad  <- c("15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49")
+puntos_medios <- c(17, 22, 27, 32, 37, 42, 47)
+
+# Coahuila 2019 — CONAPO, Proyecciones 2016-2050
+tefe_coahuila <- c(47.6, 103.8, 97.4, 71.2, 35.8, 8.8, 0.9)
+
+# México nacional 2019 — INEGI Censo 2020 / Estrada-Ávalos et al. (RDE-INEGI 2022)
+tefe_mexico   <- c(52.3, 101.2, 89.7, 61.5, 28.8, 6.8, 0.5)
+
+# Suiza 2019 — FSO (BEVNAT) / Human Fertility Database
+tefe_suiza    <- c(1.9, 26.0, 83.5, 102.8, 52.4, 10.8, 0.6)
+
+# ── 2. Data frame largo ───────────────────────────────────────────────────────
+df <- data.frame(
+  grupo_edad  = rep(grupos_edad, 3),
+  punto_medio = rep(puntos_medios, 3),
+  tefe        = c(tefe_coahuila, tefe_mexico, tefe_suiza),
+  poblacion   = rep(c("Coahuila, México",
+                      "México (nacional)",
+                      "Suiza"), each = 7)
+)
+
+df$grupo_edad <- factor(df$grupo_edad, levels = grupos_edad)
+df$poblacion  <- factor(df$poblacion,
+                        levels = c("México (nacional)",
+                                   "Coahuila, México",
+                                   "Suiza"))
+
+# ── 3. TGF ────────────────────────────────────────────────────────────────────
+tgf <- df |>
+  dplyr::group_by(poblacion) |>
+  dplyr::summarise(TGF = round(sum(tefe) * 5 / 1000, 2), .groups = "drop")
+
+print(tgf)
+
+# ── 4. Estética ───────────────────────────────────────────────────────────────
+colores <- c(
+  "México (nacional)"  = "#A8E",   # verde oscuro
+  "Coahuila, México"   = "#CDB4DB",   # rojo
+  "Suiza"              = "#81ECEC"    # azul acero
+)
+trazos <- c(
+  "México (nacional)"  = "solid",
+  "Coahuila, México"   = "dashed",
+  "Suiza"              = "dotdash"
+)
+formas <- c(
+  "México (nacional)"  = 21,
+  "Coahuila, México"   = 22,
+  "Suiza"              = 24
+)
+
+# Etiquetas de leyenda con TGF incluida
+etiquetas <- setNames(
+  paste0(tgf$poblacion, "  (TGF = ", tgf$TGF, ")"),
+  tgf$poblacion
+)
+
+# ── 5. Gráfica A — curvas con área ────────────────────────────────────────────
+p_curvas <- ggplot(df,
+                   aes(x = grupo_edad, y = tefe,
+                       color = poblacion, fill = poblacion,
+                       group = poblacion, shape = poblacion,
+                       linetype = poblacion)) +
+  
+  geom_area(alpha = 0.10, position = "identity") +
+  geom_line(linewidth = 1.15) +
+  geom_point(size = 4, stroke = 0.8, color = "white") +
+  geom_point(size = 4, alpha = 0.95) +
+  geom_text(aes(label = tefe),
+            vjust = -1.05, size = 2.9,
+            fontface = "bold", show.legend = FALSE) +
+  
+  scale_color_manual(values = colores, labels = etiquetas,
+                     name = NULL) +
+  scale_fill_manual(values  = colores, labels = etiquetas,
+                    name = NULL) +
+  scale_shape_manual(values = formas,  labels = etiquetas,
+                     name = NULL) +
+  scale_linetype_manual(values = trazos, labels = etiquetas,
+                        name = NULL) +
+  
+  scale_y_continuous(
+    limits = c(0, 130),
+    breaks = seq(0, 120, by = 20),
+    expand = expansion(mult = c(0, 0.10))
+  ) +
+  
+  labs(
+    title    = "Tasas Específicas de Fecundidad por Edad (TEFE)",
+    subtitle = "Coahuila, México (nacional) y Suiza — 2019",
+    x        = "Grupo de edad (años)",
+    y        = "Nacimientos por cada 1,000 mujeres",
+    caption  = paste0(
+      "Fuentes: CONAPO – Proyecciones de Población 2016-2050 (Coahuila); ",
+      "INEGI – Censo 2020 / Estrada-Ávalos et al., RDE-INEGI 2022 (México nacional);\n",
+      "Federal Statistical Office – BEVNAT / Human Fertility Database (Suiza). ",
+      "TGF = Σ(TEFE) × 5 / 1,000."
+    )
+  ) +
+  
+  theme_minimal(base_size = 7) +
+  theme(
+    plot.title         = element_text(face = "bold", size = 11, hjust = 0.5),
+    plot.subtitle      = element_text(size = 7.5, hjust = 0.5,
+                                      color = "gray30"),
+    plot.caption       = element_text(size = 4.8, hjust = 0,
+                                      color = "gray50", lineheight = 1.3),
+    axis.title         = element_text(face = "bold"),
+    axis.text          = element_text(size = 7),
+    legend.position    = "bottom",
+    legend.text        = element_text(size = 6),
+    legend.key.width   = unit(2.2, "cm"),
+    panel.grid.minor   = element_blank(),
+    panel.grid.major.x = element_blank(),
+    plot.margin        = margin(15, 20, 10, 15)
+  ) +
+  guides(color    = guide_legend(nrow = 3),
+         fill     = guide_legend(nrow = 3),
+         shape    = guide_legend(nrow = 3),
+         linetype = guide_legend(nrow = 3))
+
+# ── 6. Gráfica B — barras agrupadas ──────────────────────────────────────────
+p_barras <- ggplot(df,
+                   aes(x = grupo_edad, y = tefe, fill = poblacion)) +
+  
+  geom_col(position = position_dodge(width = 0.78),
+           width = 0.72, alpha = 0.90, color = "white", linewidth = 0.3) +
+  geom_text(aes(label = tefe),
+            position = position_dodge(width = 0.78),
+            vjust = -0.45, size = 2.65, fontface = "bold") +
+  
+  scale_fill_manual(values = colores, labels = etiquetas,
+                    name = NULL) +
+  scale_y_continuous(
+    limits = c(0, 125),
+    breaks = seq(0, 120, by = 20),
+    expand = expansion(mult = c(0, 0.10))
+  ) +
+  
+  labs(
+    title    = "TEFE comparadas — gráfica de barras",
+    subtitle = "Coahuila, México (nacional) y Suiza, 2019",
+    x        = "Grupo de edad (años)",
+    y        = "Nacimientos por cada 1,000 mujeres",
+    caption  = paste0(
+      "Fuentes: CONAPO – Proyecciones 2016-2050 (Coahuila); ",
+      "INEGI – Censo 2020 (México); FSO – BEVNAT (Suiza)."
+    )
+  ) +
+  
+  theme_minimal(base_size = 7) +
+  theme(
+    plot.title         = element_text(face = "bold", size = 10, hjust = 0.5),
+    plot.subtitle      = element_text(size = 7, hjust = 0.5,
+                                      color = "gray30"),
+    plot.caption       = element_text(size = 4, hjust = 0,
+                                      color = "gray50"),
+    axis.title         = element_text(face = "bold"),
+    axis.text          = element_text(size = 7),
+    legend.position    = "bottom",
+    legend.text        = element_text(size = 6),
+    panel.grid.minor   = element_blank(),
+    panel.grid.major.x = element_blank(),
+    plot.margin        = margin(15, 20, 10, 15)
+  ) +
+  guides(fill = guide_legend(nrow = 3))
+
+# ── 7. Tabla resumen en consola ───────────────────────────────────────────────
+tabla <- df |>
+  dplyr::select(grupo_edad, poblacion, tefe) |>
+  tidyr::pivot_wider(names_from = poblacion, values_from = tefe) |>
+  dplyr::rename(`Grupo edad` = grupo_edad)
+print(as.data.frame(tabla), row.names = FALSE)
+
+print(as.data.frame(tgf), row.names = FALSE)
+
+# ── 8. Guardar ────────────────────────────────────────────────────────────────
+ggsave("TEFE_curvas_3pob_2019.png",  plot = p_curvas,
+       width = 10, height = 6.5, dpi = 180, bg = "white")
+ggsave("TEFE_barras_3pob_2019.png",  plot = p_barras,
+       width = 10, height = 6.5, dpi = 180, bg = "white")
+
+print(p_curvas)
+print(p_barras)
+
+message("\nArchivos guardados: TEFE_curvas_3pob_2019.png  y  TEFE_barras_3pob_2019.png")
+
+```
 
 ## ANÁLISIS DE PIRÁMIDES1. Pirámide Poblacional de Coahuila, 2010 (Fuente: INEGI)
 

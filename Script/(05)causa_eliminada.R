@@ -16,7 +16,7 @@ library(dplyr)
 library(openxlsx)
 
 # 3. Carga de funciones del profesor ----
-source("Funciones.R") 
+source("Script/Funciones.R") 
 
 # 4. Carga de datos ----
 def_homicidios <- fread("Data/def_pro_hom.csv") 
@@ -206,9 +206,5 @@ fwrite(e0_dif, "output/resumen_e0_homicidios.csv")
 # ==============================================================================
 # 12. RESUMEN EJECUTIVO EN CONSOLA ----
 # ==============================================================================
-cat("\n", strrep("=", 60), "\n", sep = "")
-cat("RESUMEN EJECUTIVO - CAUSA ELIMINADA (HOMICIDIOS)\n")
-cat(strrep("=", 60), "\n\n", sep = "")
-cat("Entidad: Coahuila\n\n")
+
 print(e0_dif[, .(Año = year, Sexo = ifelse(sex == "male", "Hombres", "Mujeres"), E0_Todas = round(ex_todas, 2), E0_SinHom = round(ex_sin, 2), Ganancia_Años = round(dif_homicidios, 3))])
-cat(strrep("=", 60), "\n")

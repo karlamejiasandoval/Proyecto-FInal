@@ -16,7 +16,7 @@ library(lubridate)
 library(dplyr)
 
 # 3. Carga de funciones del profesor ----
-source("Funciones.R") 
+source("Script/Funciones.R") 
 
 # 4. Carga de tablas de vida de Coahuila ----
 lt_output <- fread("Data/tablas_vida_completas.csv") 
